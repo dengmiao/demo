@@ -1,0 +1,30 @@
+server:
+  port: 7777
+  servlet:
+    context-path: /corgi
+mybatis-plus:
+  # 放在resource目录 classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath:/mybatis/mapper/*Mapper.xml
+  # 实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.corgi.core.modules.**.entity
+  #
+  global-config:
+    # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
+    sql-parser-cache: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+spring:
+  profiles:
+    active: dev
+  jpa:
+    show-sql: true
+    # 自动生成表结构
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+corgi:
+  token:
+    redis: true
+  tokenExpireTime: 60
