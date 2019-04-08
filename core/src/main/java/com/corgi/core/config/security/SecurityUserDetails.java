@@ -70,7 +70,7 @@ public class SecurityUserDetails extends SysUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.getStatus().intValue() == 1 ? true : false;
+        return this.getStatus() != null && this.getStatus().intValue() == 1 ? true : false;
     }
 
     @Override
@@ -80,6 +80,6 @@ public class SecurityUserDetails extends SysUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.getStatus().intValue() == 1 ? true : false;
+        return this.getStatus() != null && this.getStatus().intValue() == 1 ? true : false;
     }
 }

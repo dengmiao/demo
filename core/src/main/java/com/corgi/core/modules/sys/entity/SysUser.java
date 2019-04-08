@@ -1,15 +1,15 @@
 package com.corgi.core.modules.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.corgi.core.common.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -25,9 +25,16 @@ import java.util.List;
 @TableName(value = "sys_user")
 public class SysUser extends BaseEntity<Long> {
 
+    @Id
+    @TableId(type = IdType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", insertable = false, updatable = false)
+    private Long id;
+
     /**
      * 登录账号
      */
+    @Column(unique = true, nullable = false)
     private String username;
 
     /**

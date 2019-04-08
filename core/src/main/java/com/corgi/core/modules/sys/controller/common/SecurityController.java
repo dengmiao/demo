@@ -1,6 +1,5 @@
 package com.corgi.core.modules.sys.controller.common;
 
-import com.corgi.core.common.toolkit.ResponseUtil;
 import com.corgi.core.common.toolkit.ResultUtil;
 import com.corgi.core.common.vo.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +18,6 @@ public class SecurityController {
 
     @RequestMapping(value = "/needLogin",method = RequestMethod.GET)
     public Result<Object> needLogin(){
-        return new ResultUtil<Object>().setErrorMsg(401, "您还未登录");
+        return new ResultUtil<>().setErrorMsg(401, "您还未登录");
     }
 }
