@@ -5,6 +5,7 @@ _/ ___\/  _ \_  __ \/ ___\|  |
 \  \__(  <_> )  | \/ /_/  >  |
  \___  >____/|__|  \___  /|__|
      \/           /_____/
-${AnsiColor.BRIGHT_YELLOW}
+${AnsiColor.RED}
 Have fun. Don't forget to boo
+${AnsiColor.BRIGHT_YELLOW}
  :: Spring Boot ::             (${spring-boot.version})
