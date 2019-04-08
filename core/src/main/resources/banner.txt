@@ -1,8 +1,10 @@
+${AnsiColor.CYAN}
                           .__
   ____  ___________  ____ |__|
 _/ ___\/  _ \_  __ \/ ___\|  |
 \  \__(  <_> )  | \/ /_/  >  |
  \___  >____/|__|  \___  /|__|
      \/           /_____/
+${AnsiColor.BRIGHT_YELLOW}
 Have fun. Don't forget to boo
- :: Spring Boot ::             (${spring-boot.version}})
+ :: Spring Boot ::             (${spring-boot.version})
