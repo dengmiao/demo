@@ -7,6 +7,7 @@ import com.corgi.core.config.security.jwt.RestAccessDeniedHandler;
 import com.corgi.core.config.security.permission.MyFilterSecurityInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    /**
+     * 替换外部配置
+     */
     private static List<String> ignoredUrls = new ArrayList<String>(){
         {
             add("/test/**");
@@ -67,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //http.csrf().disable();
+        http.csrf().disable();
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
 
@@ -111,6 +116,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //添加自定义权限过滤器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
                 //添加JWT过滤器 除已配置的其它请求都需经过此过滤器
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenRedis, tokenExpireTime, redisTemplate));
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenRedis, tokenExpireTime, redisTemplate))
+                // spring security就支持表单登录和异步json登录了
+                .addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
+        filter.setAuthenticationSuccessHandler(successHandler);
+        filter.setAuthenticationFailureHandler(failHandler);
+        filter.setFilterProcessesUrl("/login");
+
+        //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
     }
 }

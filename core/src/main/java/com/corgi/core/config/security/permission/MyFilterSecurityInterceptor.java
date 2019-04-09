@@ -22,6 +22,11 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor imp
     @Autowired
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
     @Autowired
     public void setMyAccessDecisionManager(MyAccessDecisionManager myAccessDecisionManager) {
         super.setAccessDecisionManager(myAccessDecisionManager);
@@ -51,5 +56,10 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor imp
     @Override
     public SecurityMetadataSource obtainSecurityMetadataSource() {
         return this.securityMetadataSource;
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }
