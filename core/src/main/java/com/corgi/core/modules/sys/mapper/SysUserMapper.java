@@ -1,4 +1,4 @@
-package com.corgi.core.modules.sys.Mapper;
+package com.corgi.core.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.corgi.core.modules.sys.entity.SysUser;
@@ -19,6 +19,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param username
      * @return
      */
-    @Select("select * from sys_user where username = #{username}")
+    @Select("select * from sys_user where del_flag = 0 and username = #{username}")
     List<SysUser> selectByUsername(String username);
 }

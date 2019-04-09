@@ -30,7 +30,7 @@ public interface SecurityConstant {
     /**
      * 用户选择JWT保存时间参数头
      */
-    String SAVE_LOGIN = "saveLogin";
+    String SAVE_LOGIN = "rememberMe";
 
     /**
      * 交互token前缀key

@@ -3,6 +3,7 @@ package com.corgi.core.modules.sys.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.corgi.core.common.base.BaseEntity;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,6 +15,7 @@ import javax.persistence.Table;
  * @create: 2019-04-06 14:30
  **/
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "sys_permission")
 @TableName("sys_permission")

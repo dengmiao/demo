@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @create: 2019-04-06 15:37
  **/
 @Configuration
+@MapperScan({"com.corgi.**.mapper"})
 public class MybatisPlusConfig {
 
     /**

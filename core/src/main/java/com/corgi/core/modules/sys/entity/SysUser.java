@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.corgi.core.common.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ import java.util.List;
  * @create: 2019-04-06 15:44
  **/
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "sys_user")
 @TableName(value = "sys_user")

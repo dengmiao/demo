@@ -1,4 +1,4 @@
-package com.corgi.core.modules.sys.Mapper;
+package com.corgi.core.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.corgi.core.modules.sys.entity.SysRole;
@@ -21,6 +21,6 @@ public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
      * @param userId
      * @return
      */
-    @Select("select r.* from sys_user_role ur left join sys_role r on r.id = ur.role_id where ur.user_id = #{userId}")
+    @Select("select r.* from sys_user_role ur left join sys_role r on r.id = ur.role_id and r.del_flag = 0 where ur.user_id = #{userId}")
     List<SysRole> selectByUserId(@Param("userId") String userId);
 }

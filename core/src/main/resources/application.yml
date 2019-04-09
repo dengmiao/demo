@@ -3,10 +3,10 @@ server:
   servlet:
     context-path: /corgi
 mybatis-plus:
-  # 放在resource目录 classpath:/mapper/*Mapper.xml
-  mapper-locations: classpath:/mybatis/mapper/*Mapper.xml
+  # 放在resource目录 classpath:/mapper/*mapper.xml
+  mapper-locations: classpath:/mybatis/mapper/**/*Mapper.xml
   # 实体扫描，多个package用逗号或者分号分隔
-  type-aliases-package: com.corgi.core.modules.**.entity
+  type-aliases-package: com.corgi.**.entity
   #
   global-config:
     # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
@@ -14,6 +14,8 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
+    # show sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 spring:
   profiles:
     active: dev

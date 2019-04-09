@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.corgi.core.common.toolkit.ResponseUtil;
 import com.corgi.core.common.vo.TokenUser;
 import com.corgi.core.config.security.SecurityConstant;
+import com.corgi.core.modules.sys.entity.SysUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -101,6 +99,11 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
                     .compact();
         }
 
-        ResponseUtil.out(response, ResponseUtil.resultMap(true,200,"登录成功", token));
+        ResponseUtil.out(response, ResponseUtil.resultMap(true,200,"登录成功", new HashMap(16){
+            {
+                put("token", token);
+                put("userInfo", new SysUser().setUsername(username));
+            }
+        }));
     }
 }
