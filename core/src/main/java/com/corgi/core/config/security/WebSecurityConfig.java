@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private static List<String> ignoredUrls = new ArrayList<String>(){
         {
-            add("/test/**");
+            add("/api/auth/**");
         }
     };
 

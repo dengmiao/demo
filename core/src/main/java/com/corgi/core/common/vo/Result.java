@@ -1,5 +1,6 @@
 package com.corgi.core.common.vo;
 
+import com.corgi.core.common.constant.CommonConstant;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -38,4 +39,44 @@ public class Result<T> implements Serializable {
      * 时间戳
      */
     private long timestamp = System.currentTimeMillis();
+
+    public void error500(String message) {
+        this.message = message;
+        this.code = CommonConstant.SC_INTERNAL_SERVER_ERROR_500;
+        this.success = false;
+    }
+
+    public void success(String message) {
+        this.message = message;
+        this.code = CommonConstant.SC_OK_200;
+        this.success = true;
+    }
+
+    public static Result<Object> error(String msg) {
+        return error(CommonConstant.SC_INTERNAL_SERVER_ERROR_500, msg);
+    }
+
+    public static Result<Object> error(int code, String msg) {
+        Result<Object> r = new Result<Object>();
+        r.setCode(code);
+        r.setMessage(msg);
+        r.setSuccess(false);
+        return r;
+    }
+
+    public static Result<Object> ok(String msg) {
+        Result<Object> r = new Result<Object>();
+        r.setSuccess(true);
+        r.setCode(CommonConstant.SC_OK_200);
+        r.setMessage(msg);
+        return r;
+    }
+
+    public static Result<Object> ok(Object obj) {
+        Result<Object> r = new Result<Object>();
+        r.setSuccess(true);
+        r.setCode(CommonConstant.SC_OK_200);
+        r.setResult(obj);
+        return r;
+    }
 }

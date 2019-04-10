@@ -20,7 +20,7 @@ public interface SecurityConstant {
     /**
      * token参数头
      */
-    String HEADER = "accessToken";
+    String HEADER = "X-Access-Token";
 
     /**
      * 权限参数头
