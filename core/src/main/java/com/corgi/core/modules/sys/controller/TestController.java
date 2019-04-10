@@ -2,6 +2,7 @@ package com.corgi.core.modules.sys.controller;
 
 import com.corgi.core.common.toolkit.ResultUtil;
 import com.corgi.core.common.vo.Result;
+import com.corgi.core.modules.sys.entity.SysUser;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,13 +19,7 @@ public class TestController {
 
     @RequestMapping("echo")
     public Object echo() {
-        return new HashMap<String, Object>(16){
-            {
-                put("name", "张三");
-                put("age", 25);
-                put("habit", "coding");
-            }
-        };
+        return new SysUser().setId(123456789876543210L).setUsername("test");
     }
 
     @RequestMapping("logout")

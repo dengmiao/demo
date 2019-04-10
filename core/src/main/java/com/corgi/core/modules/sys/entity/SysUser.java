@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.corgi.core.common.base.BaseEntity;
+import com.corgi.core.common.toolkit.CustomSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,6 +33,7 @@ public class SysUser extends BaseEntity<Long> {
     @TableId(type = IdType.AUTO)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", insertable = false, updatable = false)
+    @JsonSerialize(using = CustomSerializer.class)
     private Long id;
 
     /**

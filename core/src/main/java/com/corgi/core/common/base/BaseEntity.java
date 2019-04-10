@@ -1,9 +1,12 @@
 package com.corgi.core.common.base;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.corgi.core.common.toolkit.CustomSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,6 +39,8 @@ public class BaseEntity<T> implements Serializable {
     @Id
     @TableId(type = IdType.AUTO)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JSONField(serializeUsing = CustomSerializer.class)
+    @JsonSerialize(using = CustomSerializer.class)
     private T id;
 
     /**
