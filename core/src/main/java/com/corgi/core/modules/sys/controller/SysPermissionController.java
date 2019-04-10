@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.corgi.core.common.toolkit.Md5Util;
 import com.corgi.core.common.toolkit.ObjectUtil;
-import com.corgi.core.common.toolkit.ResultUtil;
 import com.corgi.core.common.vo.Result;
 import com.corgi.core.modules.sys.entity.SysPermission;
 import com.corgi.core.modules.sys.service.ISysPermissionService;
@@ -69,7 +68,7 @@ public class SysPermissionController {
                 if(permission.getIsLeaf()==0) {
                     getPermissionJsonArray(jsonArray, metaList, json);
                 }
-            }else if(parentJson!=null && ObjectUtil.isNotEmpty(tempPid) && tempPid.equals(parentJson.getString("id"))){
+            }else if(parentJson!=null && ObjectUtil.isNotEmpty(tempPid) && String.valueOf(tempPid).equals(parentJson.getString("id"))){
                 if(permission.getMenuType()==0) {
                     JSONObject metaJson = parentJson.getJSONObject("meta");
                     if(metaJson.containsKey("permissionList")) {
