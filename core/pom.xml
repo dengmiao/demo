@@ -28,6 +28,10 @@
         <mybatis-plus.version>3.0.6</mybatis-plus.version>
         <!--fast json-->
         <fastjson.version>1.2.56</fastjson.version>
+        <!-- hutool -->
+        <hutool.version>4.1.19</hutool.version>
+        <!-- UserAgentUtil -->
+        <userAgentUtil.version>1.21</userAgentUtil.version>
     </properties>
 
     <dependencies>
@@ -121,7 +125,13 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>4.1.19</version>
+            <version>${hutool.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>${userAgentUtil.version}</version>
         </dependency>
 
         <dependency>
