@@ -35,4 +35,10 @@ public class SysRole extends BaseEntity<Long> {
      * 描述
      */
     private String description;
+
+    /**
+     * 数据范围
+     * (1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在部门及以下数据；5：所在部门数据；8：仅本人数据；9：按明细设置)
+     */
+    private String dataScope;
 }

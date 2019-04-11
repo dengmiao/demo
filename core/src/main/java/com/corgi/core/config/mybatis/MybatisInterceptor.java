@@ -9,7 +9,6 @@ import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -26,12 +25,6 @@ import java.util.Properties;
 @Component
 @Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
 public class MybatisInterceptor implements Interceptor {
-
-    private SecurityUtil securityUtil;
-
-    public void setSecurityUtil(final SecurityUtil securityUtil) {
-        this.securityUtil = securityUtil;
-    }
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -55,12 +48,12 @@ public class MybatisInterceptor implements Interceptor {
                         Object local_createBy = field.get(parameter);
                         field.setAccessible(false);
                         if (local_createBy == null || local_createBy.equals("")) {
-                            String createBy = "jeecg-boot";
+                            String createBy = "1";
                             // 获取登录用户信息
-                            SysUser sysUser = securityUtil.getCurrUser();
+                            SysUser sysUser = SecurityUtil.getLoginUser();
                             if (sysUser != null) {
                                 // 登录账号
-                                createBy = sysUser.getUsername();
+                                createBy = String.valueOf(sysUser.getId());
                             }
                             if (!ObjectUtil.isEmpty(createBy)) {
                                 field.setAccessible(true);
@@ -102,12 +95,12 @@ public class MybatisInterceptor implements Interceptor {
                         Object local_updateBy = field.get(parameter);
                         field.setAccessible(false);
                         if (local_updateBy == null || local_updateBy.equals("")) {
-                            String updateBy = "jeecg-boot";
+                            String updateBy = "1";
                             // 获取登录用户信息
-                            SysUser sysUser = securityUtil.getCurrUser();
+                            SysUser sysUser = SecurityUtil.getLoginUser();
                             if (sysUser != null) {
                                 // 登录账号
-                                updateBy = sysUser.getUsername();
+                                updateBy = String.valueOf(sysUser.getId());
                             }
                             if (!ObjectUtil.isEmpty(updateBy)) {
                                 field.setAccessible(true);

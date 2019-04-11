@@ -39,11 +39,13 @@ public class BaseEntity<T> implements Serializable {
     @TableId(type = IdType.AUTO)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonSerialize(using = CustomSerializer.class)
+    @Column(name = "id")
     private T id;
 
     /**
      * 创建人
      */
+    @Column(name = "create_by", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '创建人'")
     private String createBy;
 
     /**
@@ -52,11 +54,13 @@ public class BaseEntity<T> implements Serializable {
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "create_time", columnDefinition = "datetime COMMENT '创建时间'")
     private Date createTime;
 
     /**
      * 更新人
      */
+    @Column(name = "update_by", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '更新人'")
     private String updateBy;
 
     /**
@@ -65,10 +69,12 @@ public class BaseEntity<T> implements Serializable {
     @LastModifiedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "update_time", columnDefinition = "datetime COMMENT '更新时间'")
     private Date updateTime;
 
     /**
      * 删除状态 0正常 1已删除
      */
+    @Column(name = "del_flag", columnDefinition = "int(1) DEFAULT NULL COMMENT '删除标识位 0正常 1已删除'", length = 1)
     private Integer delFlag;
 }

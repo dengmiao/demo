@@ -32,6 +32,8 @@
         <hutool.version>4.1.19</hutool.version>
         <!-- UserAgentUtil -->
         <userAgentUtil.version>1.21</userAgentUtil.version>
+        <!--guava-->
+        <google.guava.version>27.0.1-jre</google.guava.version>
     </properties>
 
     <dependencies>
@@ -132,6 +134,12 @@
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
             <version>${userAgentUtil.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${google.guava.version}</version>
         </dependency>
 
         <dependency>

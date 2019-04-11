@@ -1,6 +1,8 @@
 package com.corgi.core.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.corgi.core.common.annotation.DataScope;
+import com.corgi.core.common.enums.DataScopeConstant;
 import com.corgi.core.modules.sys.entity.SysPermission;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -25,5 +27,6 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
      * @param username
      * @return
      */
+    @DataScope(value = DataScopeConstant.DATA_SCOPE_ALL)
     List<SysPermission> selectByUsername(String username);
 }

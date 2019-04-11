@@ -93,13 +93,20 @@ public class SysUser extends BaseEntity<Long> {
      * 用户拥有角色
      */
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     private List<SysRole> roles;
 
     /**
      * 用户拥有的权限
      */
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     private List<SysPermission> permissions;
+
+    /**
+     * 所属机构
+     */
+    @Transient
+    @TableField(exist = false)
+    private SysDept dept;
 }
