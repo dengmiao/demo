@@ -14,7 +14,7 @@ import java.util.List;
  * @create: 2019-04-09 17:39
  **/
 @FunctionalInterface
-interface IBaseService<Entity, ID extends Serializable> {
+public interface IBaseJpaService<Entity, ID extends Serializable> {
 
     /**
      * 获取repository

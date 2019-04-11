@@ -1,6 +1,7 @@
 package com.corgi.core.config.security;
 
 import cn.hutool.core.util.StrUtil;
+import com.corgi.core.common.annotation.Log;
 import com.corgi.core.modules.sys.entity.SysUser;
 import com.corgi.core.modules.sys.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private ISysUserService iSysUserService;
 
     @Override
+    @Log(model = "LOGIN", action = "/login")
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String flagKey = "loginFailFlag:"+username;
         String value = redisTemplate.opsForValue().get(flagKey);

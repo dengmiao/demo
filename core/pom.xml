@@ -26,14 +26,16 @@
         <druid.version>1.1.10</druid.version>
         <!-- mybatis-plus -->
         <mybatis-plus.version>3.0.6</mybatis-plus.version>
-        <!--fast json-->
+        <!-- fast json -->
         <fastjson.version>1.2.56</fastjson.version>
         <!-- hutool -->
         <hutool.version>4.1.19</hutool.version>
         <!-- UserAgentUtil -->
         <userAgentUtil.version>1.21</userAgentUtil.version>
-        <!--guava-->
+        <!-- guava -->
         <google.guava.version>27.0.1-jre</google.guava.version>
+        <!-- swagger -->
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <dependencies>
@@ -140,6 +142,18 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${google.guava.version}</version>
+        </dependency>
+
+        <!-- Swagger API文档 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
 
         <dependency>

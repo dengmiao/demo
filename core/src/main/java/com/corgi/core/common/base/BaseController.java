@@ -1,7 +1,12 @@
 package com.corgi.core.common.base;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.corgi.core.common.toolkit.ResultUtil;
+import com.corgi.core.common.vo.PageVo;
 import com.corgi.core.common.vo.Result;
+import com.corgi.core.modules.sys.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +25,10 @@ public abstract class BaseController<E, ID extends Serializable> {
      * @return
      */
     @Autowired
-    public abstract IBaseService<E,ID> getService();
+    public abstract IBaseJpaService<E,ID> getService();
+
+    @Autowired
+    public abstract IBaseMybatisService<E> getMybatisService();
 
     @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
     @ResponseBody
@@ -37,13 +45,17 @@ public abstract class BaseController<E, ID extends Serializable> {
         return new ResultUtil<List<E>>().setData(list);
     }
 
-    /*@RequestMapping(value = "/getByPage",method = RequestMethod.GET)
+    @RequestMapping(value = "/getByPage",method = RequestMethod.GET)
     @ResponseBody
-    public Result<Page<E>> getByPage(@ModelAttribute PageVo page){
-
-        Page<E> data = getService().findAll(PageUtil.initPage(page));
-        return new ResultUtil<Page<E>>().setData(data);
-    }*/
+    public Result<IPage<E>> getByPage(@ModelAttribute PageVo pagevo, E e){
+        Result<IPage<E>> result = new Result<IPage<E>>();
+        QueryWrapper<E> queryWrapper = new QueryWrapper<E>(e);
+        Page<E> page = new Page<E>(pagevo.getPageNo(), pagevo.getPageSize());
+        IPage<E> pageList = getMybatisService().page(page, queryWrapper);
+        result.setSuccess(true);
+        result.setResult(pageList);
+        return result;
+    }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
