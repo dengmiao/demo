@@ -1,5 +1,6 @@
 package com.corgi.core.config.security;
 
+import com.corgi.core.config.auto.CorgiProperties;
 import com.corgi.core.config.security.jwt.AuthenticationFailHandler;
 import com.corgi.core.config.security.jwt.AuthenticationSuccessHandler;
 import com.corgi.core.config.security.jwt.JwtAuthenticationFilter;
@@ -19,9 +20,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @description: spring security 核心配置类
@@ -57,13 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private StringRedisTemplate redisTemplate;
 
     /**
-     * 替换外部配置
+     * 外部配置
      */
-    private static List<String> ignoredUrls = new ArrayList<String>(){
-        {
-            add("/api/auth/**");
-        }
-    };
+    @Autowired
+    private CorgiProperties corgiProperties;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -77,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests();
 
         //除配置文件忽略路径其它所有请求都需经过认证和授权
-        for(String url:ignoredUrls){
+        for(String url : corgiProperties.getIgnoreUrls()){
             registry.antMatchers(url).permitAll();
         }
 

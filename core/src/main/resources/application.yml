@@ -39,3 +39,13 @@ corgi:
   loginTimeLimit: 10
   # 错误超过次数后多少分钟后才能继续登录（分钟）
   loginAfterTime: 10
+  # 自动配置
+  auto:
+    ignoreUrls:
+      - /api/auth/**
+      - /druid/**
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /swagger/**
+      - /test/**
+
