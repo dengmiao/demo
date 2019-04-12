@@ -3,10 +3,10 @@ package com.corgi.core.common.base;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.corgi.core.common.toolkit.ObjectUtil;
 import com.corgi.core.common.toolkit.ResultUtil;
 import com.corgi.core.common.vo.PageVo;
 import com.corgi.core.common.vo.Result;
-import com.corgi.core.modules.sys.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,12 +45,27 @@ public abstract class BaseController<E, ID extends Serializable> {
         return new ResultUtil<List<E>>().setData(list);
     }
 
-    @RequestMapping(value = "/getByPage",method = RequestMethod.GET)
+    /**
+     * 基于mybatis的分页
+     * @param pageVo
+     * @param e
+     * @return
+     */
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
-    public Result<IPage<E>> getByPage(@ModelAttribute PageVo pagevo, E e){
-        Result<IPage<E>> result = new Result<IPage<E>>();
-        QueryWrapper<E> queryWrapper = new QueryWrapper<E>(e);
-        Page<E> page = new Page<E>(pagevo.getPageNo(), pagevo.getPageSize());
+    public Result<IPage<E>> getByPage(@ModelAttribute PageVo pageVo, E e){
+        Result<IPage<E>> result = new Result<>();
+        QueryWrapper<E> queryWrapper = new QueryWrapper<>(e);
+        Page<E> page = new Page<>(pageVo.getPageNo(), pageVo.getPageSize());
+        //排序逻辑 处理 todo 多字段排序
+        String column = pageVo.getColumn(), order = pageVo.getOrder();
+        if(ObjectUtil.isNotEmpty(column) && ObjectUtil.isNotEmpty(order)) {
+            if("asc".equals(order)) {
+                queryWrapper.orderByAsc(ObjectUtil.camelToUnderline(column));
+            }else {
+                queryWrapper.orderByDesc(ObjectUtil.camelToUnderline(column));
+            }
+        }
         IPage<E> pageList = getMybatisService().page(page, queryWrapper);
         result.setSuccess(true);
         result.setResult(pageList);

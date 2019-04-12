@@ -1,13 +1,13 @@
 package com.corgi.core.modules.sys.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.corgi.core.common.base.IBaseMybatisService;
 import com.corgi.core.modules.sys.entity.SysUser;
 
 /**
  *
  * @author dengmiao
  */
-public interface ISysUserService extends IService<SysUser> {
+public interface ISysUserService extends IBaseMybatisService<SysUser> {
 
     /**
      * 按用户名查询
