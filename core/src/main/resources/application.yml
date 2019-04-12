@@ -48,4 +48,12 @@ corgi:
       - /swagger-resources/**
       - /swagger/**
       - /test/**
-
+swagger:
+  title: Corgi API 接口文档
+  description: Corgi Api Documentation
+  version: 1.0.0
+  termsOfServiceUrl: www.baidu.com
+  contact:
+    name: corgi
+    url: www.baidu.com
+    email: 1297320571@qq.com

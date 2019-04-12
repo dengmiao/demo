@@ -53,8 +53,7 @@ public abstract class BaseController<E, ID extends Serializable> {
      */
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
-    public Result<IPage<E>> getByPage(@ModelAttribute PageVo pageVo, E e){
-        Result<IPage<E>> result = new Result<>();
+    public Result<?> getByPage(@ModelAttribute PageVo pageVo, E e){
         QueryWrapper<E> queryWrapper = new QueryWrapper<>(e);
         Page<E> page = new Page<>(pageVo.getPageNo(), pageVo.getPageSize());
         //排序逻辑 处理 todo 多字段排序
@@ -67,9 +66,7 @@ public abstract class BaseController<E, ID extends Serializable> {
             }
         }
         IPage<E> pageList = getMybatisService().page(page, queryWrapper);
-        result.setSuccess(true);
-        result.setResult(pageList);
-        return result;
+        return Result.ok(pageList);
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)

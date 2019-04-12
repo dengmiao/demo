@@ -2,10 +2,16 @@ package com.corgi.core.modules.sys.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.corgi.core.common.base.BaseController;
+import com.corgi.core.common.base.IBaseJpaService;
+import com.corgi.core.common.base.IBaseMybatisService;
 import com.corgi.core.common.toolkit.Md5Util;
 import com.corgi.core.common.toolkit.ObjectUtil;
+import com.corgi.core.common.vo.PageVo;
 import com.corgi.core.common.vo.Result;
 import com.corgi.core.modules.sys.entity.SysPermission;
+import com.corgi.core.modules.sys.model.SysPermissionTree;
 import com.corgi.core.modules.sys.service.ISysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +29,10 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("sys/permission")
-public class SysPermissionController {
+public class SysPermissionController extends BaseController<SysPermission, Long> {
 
     @Autowired
-    private ISysPermissionService iSysPermissionService;
+    private ISysPermissionService sysPermissionService;
 
     /**
      * 查询用户权限
@@ -36,7 +43,7 @@ public class SysPermissionController {
         Result<JSONArray> result = new Result<>();
         try {
             String username = req.getParameter("username");
-            List<SysPermission> metaList = iSysPermissionService.findByUser(username);
+            List<SysPermission> metaList = sysPermissionService.findByUser(username);
             JSONArray jsonArray = new JSONArray();
             this.getPermissionJsonArray(jsonArray, metaList, null);
             result.setResult(jsonArray);
@@ -48,7 +55,23 @@ public class SysPermissionController {
         return result;
     }
 
-
+    /**
+     * 分页树 重写base
+     * @param pageVo
+     * @param sysPermission
+     * @return
+     */
+    @Override
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    public Result<?> getByPage(PageVo pageVo, SysPermission sysPermission) {
+        LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
+        query.eq(SysPermission::getDelFlag, 0);
+        query.orderByAsc(SysPermission::getSortNo);
+        List<SysPermission> list = sysPermissionService.list(query);
+        List<SysPermissionTree> treeList = new ArrayList<>();
+        getTreeList(treeList, list, null);
+        return Result.ok(treeList);
+    }
 
     /**
      *  获取菜单JSON数组
@@ -156,5 +179,34 @@ public class SysPermissionController {
         }else {
             return null;
         }
+    }
+
+    private void getTreeList(List<SysPermissionTree> treeList,List<SysPermission> metaList,SysPermissionTree temp) {
+        for (SysPermission permission : metaList) {
+            String tempPid = String.valueOf(permission.getParentId());
+            SysPermissionTree tree = new SysPermissionTree(permission);
+            if(temp==null && ObjectUtil.isEmpty(tempPid)) {
+                treeList.add(tree);
+                if(tree.getIsLeaf()==0) {
+                    getTreeList(treeList, metaList, tree);
+                }
+            }else if(temp!=null && tempPid!=null && tempPid.equals(temp.getId())){
+                temp.getChildren().add(tree);
+                if(tree.getIsLeaf()==0) {
+                    getTreeList(treeList, metaList, tree);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public IBaseJpaService<SysPermission, Long> getService() {
+        return null;
+    }
+
+    @Override
+    public IBaseMybatisService<SysPermission> getMybatisService() {
+        return sysPermissionService;
     }
 }

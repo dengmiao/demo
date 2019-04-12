@@ -1,5 +1,7 @@
 package com.corgi.core.common.constant;
 
+import lombok.Data;
+
 /**
  * @description: 系统常量
  * @author: dengmiao
@@ -9,14 +11,55 @@ public interface CommonConstant {
 
     //=========================响应状态码==========================//
     /**
-     * 成功
+     * 响应状态枚举
      */
-    Integer SC_OK_200 = 200;
+    enum HttpState {
+        /**
+         * OK
+         */
+        OK(200, "操作成功"),
+        /**
+         * Bad Request
+         */
+        BAD_REQUEST(400, "Bad Request"),
+        /**
+         * Unauthorized
+         */
+        UNAUTHORIZED(401, "Unauthorized"),
+        /**
+         * Payment Required
+         */
+        PAYMENT_REQUIRED(402, "Payment Required"),
+        /**
+         * Forbidden
+         */
+        FORBIDDEN(403, "Forbidden"),
+        /**
+         * Not Found
+         */
+        NOT_FOUND(404, "Not Found"),
+        /**
+         * Internal Server Error
+         */
+        INTERNAL_SERVER_ERROR(500, "操作失败");
 
-    /**
-     * 服务器错误
-     */
-    Integer SC_INTERNAL_SERVER_ERROR_500 = 500;
+        final int value;
+
+        final String reasonPhrase;
+
+        HttpState (int value, String reasonPhrase) {
+            this.value = value;
+            this.reasonPhrase = reasonPhrase;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getReasonPhrase() {
+            return reasonPhrase;
+        }
+    }
 
     //=========================系统日志==========================//
     /**

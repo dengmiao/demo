@@ -13,5 +13,5 @@ import java.io.Serializable;
  * @create: 2019-04-09 17:42
  **/
 @NoRepositoryBean
-public interface IBaseDao<E, ID extends Serializable> extends JpaRepository<E, ID>, JpaSpecificationExecutor<E> {
+public interface IBaseRepository<E, ID extends Serializable> extends JpaRepository<E, ID>, JpaSpecificationExecutor<E> {
 }

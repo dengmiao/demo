@@ -2,6 +2,7 @@ package com.corgi.core.common.vo;
 
 import com.corgi.core.common.constant.CommonConstant;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @create: 2019-04-04 17:41
  **/
 @Data
+@Accessors(chain = true)
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,18 +44,18 @@ public class Result<T> implements Serializable {
 
     public void error500(String message) {
         this.message = message;
-        this.code = CommonConstant.SC_INTERNAL_SERVER_ERROR_500;
+        this.code = CommonConstant.HttpState.INTERNAL_SERVER_ERROR.getValue();
         this.success = false;
     }
 
     public void success(String message) {
         this.message = message;
-        this.code = CommonConstant.SC_OK_200;
+        this.code = CommonConstant.HttpState.OK.getValue();
         this.success = true;
     }
 
     public static Result<Object> error(String msg) {
-        return error(CommonConstant.SC_INTERNAL_SERVER_ERROR_500, msg);
+        return error(CommonConstant.HttpState.INTERNAL_SERVER_ERROR.getValue(), msg);
     }
 
     public static Result<Object> error(int code, String msg) {
@@ -67,15 +69,17 @@ public class Result<T> implements Serializable {
     public static Result<Object> ok(String msg) {
         Result<Object> r = new Result<Object>();
         r.setSuccess(true);
-        r.setCode(CommonConstant.SC_OK_200);
+        r.setCode(CommonConstant.HttpState.OK.getValue());
         r.setMessage(msg);
         return r;
     }
 
     public static Result<Object> ok(Object obj) {
+        CommonConstant.HttpState httpState = CommonConstant.HttpState.OK;
         Result<Object> r = new Result<Object>();
         r.setSuccess(true);
-        r.setCode(CommonConstant.SC_OK_200);
+        r.setCode(httpState.getValue());
+        r.setMessage(httpState.getReasonPhrase());
         r.setResult(obj);
         return r;
     }

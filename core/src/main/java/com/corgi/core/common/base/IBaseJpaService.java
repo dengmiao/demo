@@ -20,7 +20,7 @@ public interface IBaseJpaService<Entity, ID extends Serializable> {
      * 获取repository
      * @return
      */
-    IBaseDao<Entity, ID> getRepository();
+    IBaseRepository<Entity, ID> getRepository();
 
     /**
      * 根据ID获取
