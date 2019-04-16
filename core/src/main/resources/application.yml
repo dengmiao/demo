@@ -57,3 +57,6 @@ swagger:
     name: corgi
     url: www.baidu.com
     email: 1297320571@qq.com
+# 文件上传
+upload:
+  path: D://upFiles
