@@ -3,6 +3,8 @@ package com.corgi.core.modules.sys.controller;
 import com.corgi.core.common.toolkit.ResultUtil;
 import com.corgi.core.common.vo.Result;
 import com.corgi.core.modules.sys.entity.SysUser;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +17,7 @@ import java.util.HashMap;
  **/
 @RestController
 @RequestMapping("api/auth")
+@Api(tags = "测试api")
 public class TestController {
 
     @RequestMapping("echo")
@@ -30,5 +33,13 @@ public class TestController {
                 put("name", "aa");
             }
         });
+    }
+
+    @RequestMapping("json")
+    @ApiOperation(value = "json", notes = "dengmiao")
+    public Result<?> jsonSerializer() {
+        return new ResultUtil().setData(
+                new SysUser().setId(123456789876543210L).setUsername("test")
+        );
     }
 }
