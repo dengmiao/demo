@@ -83,6 +83,25 @@ public abstract class BaseController<E, ID extends Serializable> {
         return result;
     }
 
+    /**
+     * 单表修改
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public Result<E> edit(@RequestBody JSONObject jsonObject) {
+        Result<E> result = new Result<>();
+        Class<E> clazz = (Class <E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        E e = JSON.parseObject(jsonObject.toJSONString(), clazz);
+        boolean ok = getMybatisService().updateById(e);
+        if(ok) {
+            result.success("操作成功");
+        }
+        return result;
+    }
+
+    /******************************************************************************************************************/
+
     @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
     @ResponseBody
     public Result<E> get(@PathVariable ID id){
