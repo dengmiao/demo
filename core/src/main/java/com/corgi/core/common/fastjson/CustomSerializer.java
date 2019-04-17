@@ -24,7 +24,7 @@ import java.io.IOException;
 @Component
 @Aspect
 @Slf4j
-public class CustomSerializer extends JsonSerializer<Long> {
+public class CustomSerializer extends JsonSerializer<Object> {
 
     /**
      * 序列化标志位
@@ -64,11 +64,17 @@ public class CustomSerializer extends JsonSerializer<Long> {
     }
 
     @Override
-    public void serialize(Long aLong, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        if(flag) {
-            jsonGenerator.writeString(aLong != null ? String.valueOf(aLong) : null);
+    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        // 待序列化属性本身就是String
+        if(o instanceof String) {
+            jsonGenerator.writeString(o != null ? o.toString() : null);
         } else {
-            jsonGenerator.writeNumber(aLong);
+            // 待序列化属性本身是Number
+            if(flag) {
+                jsonGenerator.writeString(o != null ? String.valueOf(o) : null);
+            } else {
+                jsonGenerator.writeNumber((Long) o);
+            }
         }
     }
 }

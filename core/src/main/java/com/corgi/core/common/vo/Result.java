@@ -1,6 +1,7 @@
 package com.corgi.core.common.vo;
 
 import com.corgi.core.common.constant.CommonConstant;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -42,24 +43,30 @@ public class Result<T> implements Serializable {
      */
     private long timestamp = System.currentTimeMillis();
 
+    @JsonIgnore
+    public static final CommonConstant.HttpState OK = CommonConstant.HttpState.OK;
+
+    @JsonIgnore
+    public static final CommonConstant.HttpState ERROR = CommonConstant.HttpState.INTERNAL_SERVER_ERROR;
+
     public void error500(String message) {
         this.message = message;
-        this.code = CommonConstant.HttpState.INTERNAL_SERVER_ERROR.getValue();
+        this.code = ERROR.getValue();
         this.success = false;
     }
 
     public void success(String message) {
         this.message = message;
-        this.code = CommonConstant.HttpState.OK.getValue();
+        this.code = OK.getValue();
         this.success = true;
     }
 
     public static Result<Object> error(String msg) {
-        return error(CommonConstant.HttpState.INTERNAL_SERVER_ERROR.getValue(), msg);
+        return error(ERROR.getValue(), msg);
     }
 
     public static Result<Object> error(int code, String msg) {
-        Result<Object> r = new Result<Object>();
+        Result<Object> r = new Result<>();
         r.setCode(code);
         r.setMessage(msg);
         r.setSuccess(false);
@@ -67,19 +74,18 @@ public class Result<T> implements Serializable {
     }
 
     public static Result<Object> ok(String msg) {
-        Result<Object> r = new Result<Object>();
+        Result<Object> r = new Result<>();
         r.setSuccess(true);
-        r.setCode(CommonConstant.HttpState.OK.getValue());
+        r.setCode(OK.getValue());
         r.setMessage(msg);
         return r;
     }
 
     public static Result<Object> ok(Object obj) {
-        CommonConstant.HttpState httpState = CommonConstant.HttpState.OK;
         Result<Object> r = new Result<Object>();
         r.setSuccess(true);
-        r.setCode(httpState.getValue());
-        r.setMessage(httpState.getReasonPhrase());
+        r.setCode(OK.getValue());
+        r.setMessage(OK.getReasonPhrase());
         r.setResult(obj);
         return r;
     }
