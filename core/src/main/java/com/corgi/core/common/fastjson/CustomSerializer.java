@@ -18,6 +18,10 @@ import java.io.IOException;
  * 将Long类型序列化为String
  * 解决超过js的Number安全值(-2^53 ~ 2^53)传至前端出现精度问题
  * 用法: 待序列化的属性加<span>@JsonSerialize(using = CustomSerializer.class)</span>
+ *
+ * 纳入切面 用于判定rest API是服务于安卓还是web
+ * @io.swagger.annotations.ApiOperation 标识App API;**.controller 包且!@io.swagger.annotations.ApiOperation标识Web API
+ * 安卓端@JsonSerialize(using = CustomSerializer.class)仍序列化位Number;pc端需序列化String
  * @author: dengmiao
  * @create: 2019-04-10 21:33
  **/
@@ -32,7 +36,7 @@ public class CustomSerializer extends JsonSerializer<Object> {
     private static boolean flag = true;
 
     /**
-     * 切面
+     * 切面  App Api切点
      * 带有@ApiOperation注解 id序列化Long
      * @param point
      * @return
@@ -42,13 +46,13 @@ public class CustomSerializer extends JsonSerializer<Object> {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = point.proceed();
         if(result instanceof Result) {}
-        log.warn("@io.swagger.annotations.ApiOperation {}", Long.class);
+        log.warn("[App REST API] @io.swagger.annotations.ApiOperation {}", Long.class);
         flag = false;
         return result;
     }
 
     /**
-     * 切面
+     * 切面 WEB Controller切点
      * controller且不带有@ApiOperation注解 序列化String
      * @param point
      * @return
@@ -58,7 +62,7 @@ public class CustomSerializer extends JsonSerializer<Object> {
     public Object aroundExecution(ProceedingJoinPoint point) throws Throwable {
         Object result = point.proceed();
         if(result instanceof Result) {}
-        log.warn("!@io.swagger.annotations.ApiOperation {}", String.class);
+        log.warn("[Web REST API] !@io.swagger.annotations.ApiOperation {}", String.class);
         flag = true;
         return result;
     }
