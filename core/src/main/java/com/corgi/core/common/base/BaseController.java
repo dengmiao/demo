@@ -11,10 +11,12 @@ import com.corgi.core.common.vo.PageVo;
 import com.corgi.core.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -69,6 +71,7 @@ public abstract class BaseController<E, ID extends Serializable> {
      * @return
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @Transactional(rollbackFor = Exception.class)
     public Result<E> add(@RequestBody JSONObject jsonObject) {
         Result<E> result = new Result<>();
         try {
@@ -88,7 +91,8 @@ public abstract class BaseController<E, ID extends Serializable> {
      * @param jsonObject
      * @return
      */
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    @Transactional(rollbackFor = Exception.class)
     public Result<E> edit(@RequestBody JSONObject jsonObject) {
         Result<E> result = new Result<>();
         Class<E> clazz = (Class <E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -96,6 +100,48 @@ public abstract class BaseController<E, ID extends Serializable> {
         boolean ok = getMybatisService().updateById(e);
         if(ok) {
             result.success("操作成功");
+        } else {
+            result.error500("操作失败");
+        }
+        return result;
+    }
+
+    /**
+     * 单表单删除
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @Transactional(rollbackFor = Exception.class)
+    public Result<E> delete(@RequestParam(name="id") String id) {
+        Result<E> result = new Result<>();
+        boolean ok = getMybatisService().removeById(id);
+        if(ok) {
+            result.success("操作成功");
+        } else {
+            result.error500("操作失败");
+        }
+        return result;
+    }
+
+    /**
+     * 单表批量删除
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "/deleteBatch", method = RequestMethod.DELETE)
+    @Transactional(rollbackFor = Exception.class)
+    public Result<E> deleteBatch(@RequestParam(name="ids") String ids) {
+        Result<E> result = new Result<>();
+        if(ids==null || "".equals(ids.trim())) {
+            result.error500("参数不识别");
+        } else {
+            boolean ok = getMybatisService().removeByIds(Arrays.asList(ids.split(",")));
+            if(ok) {
+                result.success("操作成功");
+            } else {
+                result.error500("操作失败");
+            }
         }
         return result;
     }

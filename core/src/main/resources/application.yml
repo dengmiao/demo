@@ -11,6 +11,10 @@ mybatis-plus:
   global-config:
     # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
     sql-parser-cache: true
+    # 逻辑删除配置
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false

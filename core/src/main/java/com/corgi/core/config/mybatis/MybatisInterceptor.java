@@ -1,6 +1,7 @@
 package com.corgi.core.config.mybatis;
 
 import com.corgi.core.common.toolkit.ObjectUtil;
+import com.corgi.core.common.toolkit.ReflectUtil;
 import com.corgi.core.common.toolkit.SecurityUtil;
 import com.corgi.core.modules.sys.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,8 @@ public class MybatisInterceptor implements Interceptor {
             return invocation.proceed();
         }
         if (SqlCommandType.INSERT == sqlCommandType) {
-            Field[] fields = parameter.getClass().getDeclaredFields();
+            // parameter.getClass().getDeclaredFields()
+            Field[] fields = ReflectUtil.getFields(parameter.getClass());
             for (Field field : fields) {
                 log.debug("------field.name------" + field.getName());
                 try {
@@ -82,10 +84,9 @@ public class MybatisInterceptor implements Interceptor {
             if (parameter instanceof MapperMethod.ParamMap) {
                 MapperMethod.ParamMap<?> p = (MapperMethod.ParamMap<?>) parameter;
                 parameter = p.get("param1");
-                fields = parameter.getClass().getDeclaredFields();
-            } else {
-                fields = parameter.getClass().getDeclaredFields();
             }
+            // parameter.getClass().getDeclaredFields()
+            fields = ReflectUtil.getFields(parameter.getClass());
 
             for (Field field : fields) {
                 log.debug("------field.name------" + field.getName());
@@ -97,10 +98,14 @@ public class MybatisInterceptor implements Interceptor {
                         if (local_updateBy == null || local_updateBy.equals("")) {
                             String updateBy = "1";
                             // 获取登录用户信息
-                            SysUser sysUser = SecurityUtil.getLoginUser();
-                            if (sysUser != null) {
-                                // 登录账号
-                                updateBy = String.valueOf(sysUser.getId());
+                            try {
+                                SysUser sysUser = SecurityUtil.getLoginUser();
+                                if (sysUser != null) {
+                                    // 登录账号
+                                    updateBy = String.valueOf(sysUser.getId());
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                             if (!ObjectUtil.isEmpty(updateBy)) {
                                 field.setAccessible(true);

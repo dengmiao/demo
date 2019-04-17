@@ -26,6 +26,7 @@ public class SecurityUserDetails extends SysUser implements UserDetails {
 
     public SecurityUserDetails(SysUser user) {
         if(user!=null) {
+            this.setId(user.getId());
             this.setUsername(user.getUsername());
             this.setPassword(user.getPassword());
             this.setStatus(user.getStatus());

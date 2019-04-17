@@ -2,6 +2,7 @@ package com.corgi.core.common.base;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.corgi.core.common.fastjson.CustomSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -76,5 +77,6 @@ public class BaseEntity<T> implements Serializable {
      * 删除状态 0正常 1已删除
      */
     @Column(name = "del_flag", columnDefinition = "int(1) DEFAULT NULL COMMENT '删除标识位 0正常 1已删除'", length = 1)
+    @TableLogic
     private Integer delFlag;
 }
