@@ -2,6 +2,9 @@ server:
   port: 7777
   servlet:
     context-path: /corgi
+jasypt:
+  encryptor:
+    password: corgi
 mybatis-plus:
   # 放在resource目录 classpath:/mapper/*mapper.xml
   mapper-locations: classpath:/mybatis/mapper/**/*Mapper.xml

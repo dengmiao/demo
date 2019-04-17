@@ -26,6 +26,8 @@
         <druid.version>1.1.10</druid.version>
         <!-- mybatis-plus -->
         <mybatis-plus.version>3.0.6</mybatis-plus.version>
+        <!-- jasypt -->
+        <jasypt.version>2.1.0</jasypt.version>
         <!-- fast json -->
         <fastjson.version>1.2.56</fastjson.version>
         <!-- hutool -->
@@ -117,6 +119,13 @@
             <version>${mybatis-plus.version}</version>
         </dependency>
         <!-- mybatis-plus -->
+
+        <!-- Jasypt加密 -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>${jasypt.version}</version>
+        </dependency>
 
         <!-- fastjson -->
         <dependency>
