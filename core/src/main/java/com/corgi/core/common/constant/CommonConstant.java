@@ -1,6 +1,6 @@
 package com.corgi.core.common.constant;
 
-import lombok.Data;
+import java.util.Date;
 
 /**
  * @description: 系统常量
@@ -60,6 +60,42 @@ public interface CommonConstant {
             return reasonPhrase;
         }
     }
+
+    //=========================实体公有属性==========================//
+
+    /**
+     * 实体公共属性
+     */
+    enum MetaField {
+        CREATE_BY("createBy", "create_by", ""),
+        CREATE_TIME("createTime", "create_time", new Date()),
+        UPDATE_BY("updateBy", "update_by", ""),
+        UPDATE_TIME("updateTime", "update_time", new Date()),
+        DEL_FLAG("delFlag", "del_flag", 0);
+
+        final String prop;
+
+        final String column;
+
+        final Object defaultValue;
+
+        MetaField(String prop, String column, Object defaultValue) {
+            this.prop = prop;
+            this.column = column;
+            this.defaultValue = defaultValue;
+        }
+
+        public String getProp() {
+            return prop;
+        }
+
+        public String getColumn() {
+            return column;
+        }
+
+        public Object getDefaultValue() {
+            return defaultValue;
+        }}
 
     //=========================系统日志==========================//
     /**

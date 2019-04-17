@@ -1,5 +1,6 @@
 package com.corgi.core.modules.sys.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.corgi.core.common.base.BaseController;
@@ -13,6 +14,7 @@ import com.corgi.core.modules.sys.service.ISysUserRoleService;
 import com.corgi.core.modules.sys.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -62,8 +64,23 @@ public class SysUserController extends BaseController<SysUser, Long> {
     }
 
     @Override
+    @RequestMapping(value = "add", method = RequestMethod.POST)
     public Result<SysUser> add(@RequestBody JSONObject jsonObject) {
-        return super.add(jsonObject);
+        Result<SysUser> result = new Result<>();
+        String selectedRoles = jsonObject.getString("selectedroles");
+        SysUser sysUser = JSON.parseObject(jsonObject.toJSONString(), SysUser.class);
+        String salt = ObjectUtil.randomGen(8);
+        sysUser.setSalt(salt);
+        String passwordEncode = new BCryptPasswordEncoder().encode(sysUser.getPassword());
+        sysUser.setPassword(passwordEncode);
+        sysUser.setStatus(1);
+        boolean ok = sysUserService.save(sysUser);
+        if(ok) {
+            result.success("操作成功");
+        } else {
+            result.error500("操作失败");
+        }
+        return result;
     }
 
     @RequestMapping(value = "checkOnlyUser", method = RequestMethod.GET)

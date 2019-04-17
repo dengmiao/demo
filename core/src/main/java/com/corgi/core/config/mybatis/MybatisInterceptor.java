@@ -16,9 +16,11 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Properties;
 
+import static com.corgi.core.common.constant.CommonConstant.MetaField.*;
+
 /**
  * @program: demo
- * @description: mybatis拦截器，自动注入创建人、创建时间、修改人、修改时间
+ * @description: mybatis拦截器 自动注入创建人、创建时间、修改人、修改时间
  * @author: dengmiao
  * @create: 2019-04-06 15:40
  **/
@@ -31,100 +33,55 @@ public class MybatisInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
         String sqlId = mappedStatement.getId();
-        log.debug("------sqlId------" + sqlId);
+        log.debug("------sqlId------=> {}", sqlId);
         SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
         Object parameter = invocation.getArgs()[1];
-        log.info("------sqlCommandType------" + sqlCommandType);
+        log.info("------sqlCommandType------=> {}", sqlCommandType);
 
         if (parameter == null) {
             return invocation.proceed();
         }
         if (SqlCommandType.INSERT == sqlCommandType) {
-            // parameter.getClass().getDeclaredFields()
             Field[] fields = ReflectUtil.getFields(parameter.getClass());
             for (Field field : fields) {
-                log.debug("------field.name------" + field.getName());
+                log.debug("------field.name------=> {}", field.getName());
                 try {
-                    if ("createBy".equals(field.getName())) {
-                        field.setAccessible(true);
-                        Object local_createBy = field.get(parameter);
-                        field.setAccessible(false);
-                        if (local_createBy == null || local_createBy.equals("")) {
-                            String createBy = "1";
-                            // 获取登录用户信息
-                            SysUser sysUser = SecurityUtil.getLoginUser();
-                            if (sysUser != null) {
-                                // 登录账号
-                                createBy = String.valueOf(sysUser.getId());
-                            }
-                            if (!ObjectUtil.isEmpty(createBy)) {
-                                field.setAccessible(true);
-                                field.set(parameter, createBy);
-                                field.setAccessible(false);
-                            }
-                        }
+                    // 注入创建人
+                    if (CREATE_BY.getProp().equals(field.getName())) {
+                        fillUserId(field, parameter);
                     }
                     // 注入创建时间
-                    if ("createTime".equals(field.getName())) {
-                        field.setAccessible(true);
-                        Object local_createDate = field.get(parameter);
-                        field.setAccessible(false);
-                        if (local_createDate == null || local_createDate.equals("")) {
-                            field.setAccessible(true);
-                            field.set(parameter, new Date());
-                            field.setAccessible(false);
-                        }
+                    else if (CREATE_TIME.getProp().equals(field.getName())) {
+                        fillDate(field, parameter);
+                    }
+                    // 注入删除字段
+                    else if (DEL_FLAG.getProp().equals(field.getName())) {
+                        fillDelFlag(field, parameter);
                     }
                 } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
             }
         }
         if (SqlCommandType.UPDATE == sqlCommandType) {
-            Field[] fields = null;
+            Field[] fields;
             if (parameter instanceof MapperMethod.ParamMap) {
                 MapperMethod.ParamMap<?> p = (MapperMethod.ParamMap<?>) parameter;
                 parameter = p.get("param1");
             }
-            // parameter.getClass().getDeclaredFields()
             fields = ReflectUtil.getFields(parameter.getClass());
 
             for (Field field : fields) {
                 log.debug("------field.name------" + field.getName());
                 try {
-                    if ("updateBy".equals(field.getName())) {
-                        field.setAccessible(true);
-                        Object local_updateBy = field.get(parameter);
-                        field.setAccessible(false);
-                        if (local_updateBy == null || local_updateBy.equals("")) {
-                            String updateBy = "1";
-                            // 获取登录用户信息
-                            try {
-                                SysUser sysUser = SecurityUtil.getLoginUser();
-                                if (sysUser != null) {
-                                    // 登录账号
-                                    updateBy = String.valueOf(sysUser.getId());
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            if (!ObjectUtil.isEmpty(updateBy)) {
-                                field.setAccessible(true);
-                                field.set(parameter, updateBy);
-                                field.setAccessible(false);
-                            }
-                        }
+                    if (UPDATE_BY.getProp().equals(field.getName())) {
+                        fillUserId(field, parameter);
                     }
-                    if ("updateTime".equals(field.getName())) {
-                        field.setAccessible(true);
-                        Object local_updateDate = field.get(parameter);
-                        field.setAccessible(false);
-                        if (local_updateDate == null || local_updateDate.equals("")) {
-                            field.setAccessible(true);
-                            field.set(parameter, new Date());
-                            field.setAccessible(false);
-                        }
+                    if (UPDATE_TIME.getProp().equals(field.getName())) {
+                        fillDate(field, parameter);
                     }
                 } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
             }
         }
@@ -139,5 +96,65 @@ public class MybatisInterceptor implements Interceptor {
     @Override
     public void setProperties(Properties properties) {
 
+    }
+
+    /**
+     * 填充userId to createBy/updateBy
+     * @param field
+     * @param parameter
+     * @throws IllegalAccessException
+     */
+    private void fillUserId(Field field, Object parameter) throws IllegalAccessException {
+        field.setAccessible(true);
+        Object localUserId = field.get(parameter);
+        field.setAccessible(false);
+        if (localUserId == null || localUserId.equals("")) {
+            String userId = "1";
+            // 获取登录用户信息
+            SysUser sysUser = SecurityUtil.getLoginUser();
+            if (sysUser != null) {
+                // 登录账号
+                userId = String.valueOf(sysUser.getId());
+            }
+            if (!ObjectUtil.isEmpty(userId)) {
+                field.setAccessible(true);
+                field.set(parameter, userId);
+                field.setAccessible(false);
+            }
+        }
+    }
+
+    /**
+     * 填充写入时间 to createTime/updateTime
+     * @param field
+     * @param parameter
+     * @throws IllegalAccessException
+     */
+    private void fillDate(Field field, Object parameter) throws IllegalAccessException {
+        field.setAccessible(true);
+        Object localDate = field.get(parameter);
+        field.setAccessible(false);
+        if (localDate == null || localDate.equals("")) {
+            field.setAccessible(true);
+            field.set(parameter, new Date());
+            field.setAccessible(false);
+        }
+    }
+
+    /**
+     * 注入删除字段默认值
+     * @param field
+     * @param parameter
+     * @throws IllegalAccessException
+     */
+    private void fillDelFlag(Field field, Object parameter) throws IllegalAccessException {
+        field.setAccessible(true);
+        Object localData = field.get(parameter);
+        field.setAccessible(false);
+        if(localData == null || localData.equals("")) {
+            field.setAccessible(true);
+            field.set(parameter, DEL_FLAG.getDefaultValue());
+            field.setAccessible(false);
+        }
     }
 }
