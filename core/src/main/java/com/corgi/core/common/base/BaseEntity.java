@@ -1,5 +1,6 @@
 package com.corgi.core.common.base;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -39,7 +40,7 @@ public class BaseEntity<T> implements Serializable {
     @Id
     @TableId(type = IdType.AUTO)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonSerialize(using = CustomSerializer.class)
+    @JSONField(serializeUsing = CustomSerializer.class)
     @Column(name = "id")
     private T id;
 

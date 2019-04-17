@@ -1,5 +1,6 @@
 package com.corgi.core.modules.sys.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -33,7 +34,7 @@ public class SysUser extends BaseEntity<Long> {
     @TableId(type = IdType.AUTO)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", insertable = false, updatable = false)
-    @JsonSerialize(using = CustomSerializer.class)
+    @JSONField(serializeUsing = CustomSerializer.class)
     private Long id;
 
     /**

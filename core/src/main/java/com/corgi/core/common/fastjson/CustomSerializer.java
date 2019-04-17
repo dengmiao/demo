@@ -1,5 +1,8 @@
 package com.corgi.core.common.fastjson;
 
+import com.alibaba.fastjson.serializer.JSONSerializableSerializer;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.corgi.core.common.vo.Result;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -11,6 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 /**
  * @program: demo
@@ -28,7 +32,7 @@ import java.io.IOException;
 @Component
 @Aspect
 @Slf4j
-public class CustomSerializer extends JsonSerializer<Object> {
+public class CustomSerializer implements ObjectSerializer {
 
     /**
      * 序列化标志位
@@ -68,16 +72,16 @@ public class CustomSerializer extends JsonSerializer<Object> {
     }
 
     @Override
-    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void write(JSONSerializer serializer, Object o, Object fieldName, Type fieldType, int features) throws IOException {
         // 待序列化属性本身就是String
         if(o instanceof String) {
-            jsonGenerator.writeString(o != null ? o.toString() : null);
+            serializer.write(o);
         } else {
             // 待序列化属性本身是Number
             if(flag) {
-                jsonGenerator.writeString(o != null ? String.valueOf(o) : null);
+                serializer.write(o != null ? String.valueOf(o) : null);
             } else {
-                jsonGenerator.writeNumber((Long) o);
+                serializer.write(o);
             }
         }
     }
