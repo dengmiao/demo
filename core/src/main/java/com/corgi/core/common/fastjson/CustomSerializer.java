@@ -33,7 +33,7 @@ public class CustomSerializer extends JsonSerializer<Object> {
     /**
      * 序列化标志位
      */
-    private static boolean flag = true;
+    private static volatile boolean flag = true;
 
     /**
      * 切面  App Api切点
