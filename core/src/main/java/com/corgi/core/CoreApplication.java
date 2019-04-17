@@ -29,12 +29,24 @@ public class CoreApplication {
         //获取结束时间
         long end = System.currentTimeMillis();
         CorgiProperties corgiProperties = ((CorgiProperties) SpringContextUtil.getBean(CorgiProperties.class));
+        // 应用上下文
+        String context = env.getProperty("server.servlet.context-path");
+        // 端口号
+        String port = env.getProperty("server.port");
         log.info("\n----------------------------------------------------------\n\t"
-                        + "名称:\t'{}' is running! Access URLs:\n\t" + "本地:\t {}://localhost:{}\n\t" + "外部:\t {}://{}:{}\n\t"
-                        + "环境:\t {}\n\t" + "版本:\t {}\n\t" + "用时:\t {}\n----------------------------------------------------------",
+                        + "名称:\t'{}' is running! Access URLs:\n\t"
+                        + "本地:\t {}://localhost:{}{}\n\t"
+                        + "外部:\t {}://{}:{}{}\n\t"
+                        + "环境:\t {}\n\t"
+                        + "版本:\t {}\n\t"
+                        + "用时:\t {}\n"
+                        + "----------------------------------------------------------",
                 corgiProperties.getProject().getName(),
-                protocol, env.getProperty("server.port"), protocol, InetAddress.getLocalHost().getHostAddress(),
-                env.getProperty("server.port"), env.getActiveProfiles(), corgiProperties.getProject().getVersion(), (end - start) + "ms");
+                protocol, port, context,
+                protocol, InetAddress.getLocalHost().getHostAddress(), port, context,
+                env.getActiveProfiles(),
+                corgiProperties.getProject().getVersion(),
+                (end - start) + "ms");
     }
 
 }
