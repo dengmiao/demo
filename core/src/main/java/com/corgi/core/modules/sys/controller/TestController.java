@@ -6,6 +6,7 @@ import com.corgi.core.modules.sys.entity.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class TestController {
         });
     }
 
-    @RequestMapping("json")
+    @RequestMapping(value = "json", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "json", notes = "dengmiao")
     public Result<?> jsonSerializer() {
         return new ResultUtil().setData(

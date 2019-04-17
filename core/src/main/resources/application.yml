@@ -54,6 +54,12 @@ corgi:
       - /swagger-ui.html
       - /swagger-resources/**
       - /swagger/**
+      - /swagger/**
+      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
       - /test/**
 swagger:
   title: Corgi API 接口文档
