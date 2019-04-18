@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -40,7 +41,7 @@ public class TestController {
     @ApiOperation(value = "json", notes = "dengmiao")
     public Result<?> jsonSerializer() {
         return new ResultUtil().setData(
-                new SysUser().setId(123456789876543210L).setUsername("test")
+                new SysUser().setId(123456789876543210L).setUsername("test").setBirthday(new Date())
         );
     }
 }

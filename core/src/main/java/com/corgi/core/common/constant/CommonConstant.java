@@ -148,7 +148,7 @@ public interface CommonConstant {
         /**
          * 登录/操作/调度任务
          */
-        int LOGIN = 0, OPERATE = 2, scheduled = 2;
+        int LOGIN = 0, OPERATE = 1, scheduled = 2;
     }
 
     /**
