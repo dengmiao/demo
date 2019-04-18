@@ -1,12 +1,8 @@
 package com.corgi.core.common.fastjson;
 
-import com.alibaba.fastjson.serializer.JSONSerializableSerializer;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.corgi.core.common.vo.Result;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -72,7 +68,7 @@ public class CustomSerializer implements ObjectSerializer {
     }
 
     @Override
-    public void write(JSONSerializer serializer, Object o, Object fieldName, Type fieldType, int features) throws IOException {
+    public void write(JSONSerializer serializer, Object o, Object fieldName, Type fieldType, int features) {
         // 待序列化属性本身就是String
         if(o instanceof String) {
             serializer.write(o);
