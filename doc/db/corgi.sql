@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2019-04-18 15:51:24
+Date: 2019-04-19 17:04:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -314,8 +314,8 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', '1', '2019-04-08 16:32:30', '0', '1', '2019-04-08 16:33:26', null, '2019-04-08 16:33:29', 'admin@admin.admin', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '18383111234', '超级管理员', 'RCGTeGiH', '1', '1', 'admin');
-INSERT INTO `sys_user` VALUES ('2', '1', '2019-04-17 07:35:03', '0', '1', '2019-04-17 07:36:55', null, '2019-04-16 16:00:00', '1122@qq.com', '$2a$10$JaJ7zOP7qKP2W..hKAV1re4PJqi.ifqxYvsRat0610k492HRppHye', '18312345678', 'corgi', 'xJtw3pU2', '2', '1', 'corgi');
+INSERT INTO `sys_user` VALUES ('1', '1', '2019-04-08 16:32:30', '0', '1', '2019-04-08 16:33:26', '650910883689775.jpg', '2019-04-08 16:33:29', 'admin@admin.admin', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '18383111234', '超级管理员', 'RCGTeGiH', '1', '1', 'admin');
+INSERT INTO `sys_user` VALUES ('2', '1', '2019-04-17 07:35:03', '0', '1', '2019-04-19 07:53:59', '109951163464139769.jpg', '2019-04-16 16:00:00', '11223@qq.com', '$2a$10$JaJ7zOP7qKP2W..hKAV1re4PJqi.ifqxYvsRat0610k492HRppHye', '18312345678', 'corgi', 'xJtw3pU2', '2', '1', 'corgi');
 
 -- ----------------------------
 -- Table structure for sys_user_role
