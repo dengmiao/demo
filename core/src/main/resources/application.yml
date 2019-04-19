@@ -59,6 +59,7 @@ corgi:
       - /**/*.js
       - /**/*.css
       - /**/*.png
+      - /**/*.jpg
       - /**/*.ico
       - /test/**
 swagger:
