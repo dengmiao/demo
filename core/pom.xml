@@ -24,23 +24,14 @@
         <!-- jwt -->
         <jwt.version>0.9.0</jwt.version>
         <druid.version>1.1.10</druid.version>
-        <!-- mybatis-plus -->
-        <mybatis-plus.version>3.0.6</mybatis-plus.version>
-        <!-- jasypt -->
-        <jasypt.version>2.1.0</jasypt.version>
-        <!-- fast json -->
-        <fastjson.version>1.2.56</fastjson.version>
-        <!-- hutool -->
-        <hutool.version>4.1.19</hutool.version>
-        <!-- UserAgentUtil -->
-        <userAgentUtil.version>1.21</userAgentUtil.version>
-        <!-- guava -->
-        <google.guava.version>27.0.1-jre</google.guava.version>
-        <!-- swagger -->
-        <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.corgi</groupId>
+            <artifactId>base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -110,59 +101,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
-        </dependency>
-
-        <!-- mybatis-plus -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
-        </dependency>
-        <!-- mybatis-plus -->
-
-        <!-- Jasypt加密 -->
-        <dependency>
-            <groupId>com.github.ulisesbocchio</groupId>
-            <artifactId>jasypt-spring-boot-starter</artifactId>
-            <version>${jasypt.version}</version>
-        </dependency>
-
-        <!-- fastjson -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
-
-        <!-- Hutool工具包 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>${userAgentUtil.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${google.guava.version}</version>
-        </dependency>
-
-        <!-- Swagger API文档 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
         </dependency>
 
         <!-- 引入swagger报错 强制依赖 -->

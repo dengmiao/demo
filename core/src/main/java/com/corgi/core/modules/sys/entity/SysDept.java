@@ -1,7 +1,7 @@
 package com.corgi.core.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.corgi.core.common.base.BaseEntity;
+import com.corgi.base.base.BaseEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

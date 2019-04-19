@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.corgi.core.common.base.BaseEntity;
-import com.corgi.core.common.fastjson.CustomSerializer;
+import com.corgi.base.base.BaseEntity;
+import com.corgi.base.aspect.CustomSerializer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -65,6 +65,7 @@ public class SysUser extends BaseEntity<Long> {
      * 生日
      */
     @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JSONField(format = "yyyy-MM-dd")
     private Date birthday;
 
     /**

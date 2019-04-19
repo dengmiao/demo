@@ -2,7 +2,7 @@ package com.corgi.core.config.security.jwt;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.corgi.core.common.toolkit.ResponseUtil;
+import com.corgi.base.toolkit.ResponseUtil;
 import com.corgi.core.common.vo.TokenUser;
 import com.corgi.core.config.security.SecurityConstant;
 import com.corgi.core.modules.sys.entity.SysUser;

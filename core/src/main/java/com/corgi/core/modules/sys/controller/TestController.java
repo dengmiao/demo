@@ -1,7 +1,7 @@
 package com.corgi.core.modules.sys.controller;
 
-import com.corgi.core.common.toolkit.ResultUtil;
-import com.corgi.core.common.vo.Result;
+import com.corgi.base.toolkit.ResultUtil;
+import com.corgi.base.vo.Result;
 import com.corgi.core.modules.sys.entity.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

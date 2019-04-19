@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.corgi.core.common.enums.DataScopeConstant.*;
-import static com.corgi.core.common.toolkit.StringUtil.SPLIT_DEFAULT;
+import static com.corgi.base.toolkit.StringUtil.SPLIT_DEFAULT;
 
 /**
  * @description:

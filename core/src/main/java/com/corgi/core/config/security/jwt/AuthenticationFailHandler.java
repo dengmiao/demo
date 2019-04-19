@@ -2,7 +2,7 @@ package com.corgi.core.config.security.jwt;
 
 import cn.hutool.core.util.StrUtil;
 import com.corgi.core.common.exception.LoginFailLimitException;
-import com.corgi.core.common.toolkit.ResponseUtil;
+import com.corgi.base.toolkit.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

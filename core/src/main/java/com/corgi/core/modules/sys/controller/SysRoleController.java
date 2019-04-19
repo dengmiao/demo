@@ -1,9 +1,9 @@
 package com.corgi.core.modules.sys.controller;
 
-import com.corgi.core.common.base.BaseController;
-import com.corgi.core.common.base.IBaseJpaService;
-import com.corgi.core.common.base.IBaseMybatisService;
-import com.corgi.core.common.vo.Result;
+import com.corgi.base.base.BaseController;
+import com.corgi.base.base.IBaseJpaService;
+import com.corgi.base.base.IBaseMybatisService;
+import com.corgi.base.vo.Result;
 import com.corgi.core.modules.sys.entity.SysRole;
 import com.corgi.core.modules.sys.service.ISysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;

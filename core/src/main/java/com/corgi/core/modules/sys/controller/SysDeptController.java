@@ -1,9 +1,9 @@
 package com.corgi.core.modules.sys.controller;
 
-import com.corgi.core.common.base.BaseController;
-import com.corgi.core.common.base.IBaseJpaService;
-import com.corgi.core.common.base.IBaseMybatisService;
-import com.corgi.core.common.vo.Result;
+import com.corgi.base.base.BaseController;
+import com.corgi.base.base.IBaseJpaService;
+import com.corgi.base.base.IBaseMybatisService;
+import com.corgi.base.vo.Result;
 import com.corgi.core.modules.sys.entity.SysDept;
 import com.corgi.core.modules.sys.model.SysDeptTreeModel;
 import com.corgi.core.modules.sys.service.ISysDeptService;

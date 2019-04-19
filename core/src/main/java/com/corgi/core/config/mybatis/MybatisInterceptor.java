@@ -1,7 +1,7 @@
 package com.corgi.core.config.mybatis;
 
-import com.corgi.core.common.toolkit.ObjectUtil;
-import com.corgi.core.common.toolkit.ReflectUtil;
+import com.corgi.base.toolkit.ObjectUtil;
+import com.corgi.base.toolkit.ReflectUtil;
 import com.corgi.core.common.toolkit.SecurityUtil;
 import com.corgi.core.modules.sys.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Properties;
 
-import static com.corgi.core.common.constant.CommonConstant.MetaField.*;
+import static com.corgi.base.constant.CommonConstant.MetaField.*;
 
 /**
  * @program: demo

@@ -1,7 +1,7 @@
 package com.corgi.core.modules.sys.controller.common;
 
-import com.corgi.core.common.toolkit.ResultUtil;
-import com.corgi.core.common.vo.Result;
+import com.corgi.base.toolkit.ResultUtil;
+import com.corgi.base.vo.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,5 +1,6 @@
 package com.corgi.core.common.toolkit;
 
+import com.corgi.base.toolkit.SpringContextUtil;
 import com.corgi.core.config.security.SecurityUserDetails;
 import com.corgi.core.config.security.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
