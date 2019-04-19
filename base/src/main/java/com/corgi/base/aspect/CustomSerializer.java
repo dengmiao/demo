@@ -16,11 +16,11 @@ import java.lang.reflect.Type;
  * @description: <p>自定义json序列化器</p>
  * 将Long类型序列化为String
  * 解决超过js的Number安全值(-2^53 ~ 2^53)传至前端出现精度问题
- * 用法: 待序列化的属性加<span>@JsonSerialize(using = CustomSerializer.class)</span>
+ * 用法: 待序列化的属性加<span>@JSONField(serializeUsing = CustomSerializer.class)</span>
  *
  * 纳入切面 用于判定rest API是服务于安卓还是web
  * @io.swagger.annotations.ApiOperation 标识App API;**.controller 包且!@io.swagger.annotations.ApiOperation标识Web API
- * 安卓端@JsonSerialize(using = CustomSerializer.class)仍序列化位Number;pc端需序列化String
+ * 安卓端@JSONField(serializeUsing = CustomSerializer.class)仍序列化位Number;pc端需序列化String
  * @author: dengmiao
  * @create: 2019-04-10 21:33
  **/
