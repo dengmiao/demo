@@ -2,7 +2,9 @@ package com.corgi.core.modules.sys.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.corgi.base.base.BaseController;
 import com.corgi.base.base.IBaseJpaService;
 import com.corgi.base.base.IBaseMybatisService;
@@ -46,6 +48,11 @@ public class SysUserController extends BaseController<SysUser, Long> {
         return sysUserService;
     }
 
+    /**
+     * 查询用户角色集合
+     * @param userid
+     * @return
+     */
     @RequestMapping(value = "/queryUserRole", method = RequestMethod.GET)
     public Result<List<String>> queryUserRole(@RequestParam(name="userid",required=true) String userid) {
         Result<List<String>> result = new Result<>();
@@ -63,6 +70,11 @@ public class SysUserController extends BaseController<SysUser, Long> {
         return result;
     }
 
+    /**
+     * 添加
+     * @param jsonObject
+     * @return
+     */
     @Override
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public Result<SysUser> add(@RequestBody JSONObject jsonObject) {
@@ -83,6 +95,11 @@ public class SysUserController extends BaseController<SysUser, Long> {
         return result;
     }
 
+    /**
+     * 用户名唯一校验
+     * @param sysUser
+     * @return
+     */
     @RequestMapping(value = "checkOnlyUser", method = RequestMethod.GET)
     public Result<Boolean> checkUsername(SysUser sysUser) {
         Result<Boolean> result = new Result<>();
@@ -121,6 +138,54 @@ public class SysUserController extends BaseController<SysUser, Long> {
             return result;
         }
         result.setSuccess(true);
+        return result;
+    }
+
+    /**
+     * 冻结&解冻用户
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping(value = "/frozenBatch", method = RequestMethod.PUT)
+    public Result<SysUser> frozenBatch(@RequestBody JSONObject jsonObject) {
+        Result<SysUser> result = new Result<SysUser>();
+        try {
+            String ids = jsonObject.getString("ids");
+            String status = jsonObject.getString("status");
+            String[] arr = ids.split(",");
+            for (String id : arr) {
+                if(ObjectUtil.isNotEmpty(id)) {
+                    this.sysUserService.update(new SysUser().setStatus(Integer.parseInt(status)),
+                            new UpdateWrapper<SysUser>().lambda().eq(SysUser::getId,id));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.error500("操作失败"+e.getMessage());
+        }
+        result.success("操作成功!");
+        return result;
+    }
+
+    /**
+     * 修改密码
+     */
+    @RequestMapping(value = "/changPassword", method = RequestMethod.PUT)
+    public Result<SysUser> changPassword(@RequestBody SysUser sysUser) {
+        Result<SysUser> result = new Result<SysUser>();
+        String password = sysUser.getPassword();
+        sysUser = this.sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, sysUser.getUsername()));
+        if (sysUser == null) {
+            result.error500("未找到对应实体");
+        } else {
+            String salt = ObjectUtil.randomGen(8);
+            sysUser.setSalt(salt);
+            String passwordEncode = new BCryptPasswordEncoder().encode(password);
+            sysUser.setPassword(passwordEncode);
+            this.sysUserService.updateById(sysUser);
+            result.setResult(sysUser);
+            result.success("密码修改完成！");
+        }
         return result;
     }
 }

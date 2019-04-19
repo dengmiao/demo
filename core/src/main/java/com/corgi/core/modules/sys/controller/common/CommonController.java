@@ -1,16 +1,23 @@
 package com.corgi.core.modules.sys.controller.common;
 
+import com.corgi.base.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @description:
@@ -25,8 +32,44 @@ public class CommonController {
     @Value(value = "${upload.path}")
     private String uploadPath;
 
+    @PostMapping(value = "/upload")
+    public Result<?> upload(HttpServletRequest request) {
+        Result<?> result = new Result<>();
+        try {
+            String ctxPath = uploadPath;
+            String fileName = null;
+            String bizPath = "user";
+            String nowday = new SimpleDateFormat("yyyyMMdd").format(new Date());
+            File file = new File(ctxPath + File.separator + bizPath + File.separator + nowday);
+            if (!file.exists()) {
+                file.mkdirs();// 创建文件根目录
+            }
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            // 获取上传文件对象
+            MultipartFile mf = multipartRequest.getFile("file");
+            // 获取文件名
+            String orgName = mf.getOriginalFilename();
+            fileName = orgName.substring(0, orgName.lastIndexOf(".")) + "_" + System.currentTimeMillis() + orgName.substring(orgName.indexOf("."));
+            String savePath = file.getPath() + File.separator + fileName;
+            File savefile = new File(savePath);
+            FileCopyUtils.copy(mf.getBytes(), savefile);
+            String dbpath = bizPath + File.separator + nowday + File.separator + fileName;
+            if (dbpath.contains("\\")) {
+                dbpath = dbpath.replace("\\", "/");
+            }
+            result.setMessage(dbpath);
+            result.setSuccess(true);
+        } catch (IOException e) {
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     /**
      * 预览图片
+     * 请求地址：http://localhost:7777/corgi/common/view/{user/20190119/e1fe9925bc315c60addea1b98eb1cb1349547719_1547866868179.jpg}
      * @param request
      * @param response
      */
