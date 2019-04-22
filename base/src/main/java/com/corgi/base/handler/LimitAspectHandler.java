@@ -20,7 +20,7 @@ public class LimitAspectHandler implements CurrentAspectHandler {
     @Override
     public Object around(ProceedingJoinPoint pjp, Limit rateLimiter) throws Throwable {
         CommonConstant.HttpState httpState = CommonConstant.HttpState.OPEN_API_QPS_REQUEST_LIMIT_REACHED;
-        log.warn("自定义限流拒绝策略, @Limit:{}, HttpState:{}", rateLimiter, httpState);
+        log.warn("自定义限流拒绝策略, {}, {}", rateLimiter, httpState);
         return new ResultUtil<>().setErrorMsg(httpState.getValue(), httpState.getReasonPhrase());
     }
 }
