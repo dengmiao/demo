@@ -8,7 +8,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 
 /**
- * @description: 限流拦截
+ * @description: 限流拦截 拒绝策略
  * @author: dengmiao
  * @create: 2019-04-22 14:48
  **/
