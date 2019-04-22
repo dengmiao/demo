@@ -1,5 +1,7 @@
 package com.corgi.base.constant;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.Date;
 
 /**
@@ -63,7 +65,11 @@ public interface CommonConstant {
         public String getReasonPhrase() {
             return reasonPhrase;
         }
-    }
+
+        @Override
+        public String toString() {
+            return JSON.toJSONString(this) + ("(value:" + this.getValue() + ", reasonPhrase:" + this.getReasonPhrase() + ")");
+        }}
 
     //=========================实体公有属性==========================//
 
