@@ -27,6 +27,7 @@
     </properties>
 
     <dependencies>
+        <!-- 基础依赖 -->
         <dependency>
             <groupId>com.corgi</groupId>
             <artifactId>base</artifactId>

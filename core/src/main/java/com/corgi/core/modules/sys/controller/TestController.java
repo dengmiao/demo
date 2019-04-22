@@ -3,6 +3,7 @@ package com.corgi.core.modules.sys.controller;
 import com.corgi.base.toolkit.ResultUtil;
 import com.corgi.base.vo.Result;
 import com.corgi.core.modules.sys.entity.SysUser;
+import com.corgi.limit.annotation.Limit;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,14 @@ public class TestController {
     public Result<?> jsonSerializer() {
         return new ResultUtil().setData(
                 new SysUser().setId(123456789876543210L).setUsername("test").setBirthday(new Date())
+        );
+    }
+
+    @RequestMapping(value = "limited", method = {RequestMethod.GET})
+    @Limit(qps = 0)
+    public Result limited() {
+        return new ResultUtil<>().setData(
+          new SysUser().setId(123456789876543210L).setUsername("test").setBirthday(new Date())
         );
     }
 }

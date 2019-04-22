@@ -41,7 +41,11 @@ public interface CommonConstant {
         /**
          * Internal Server Error
          */
-        INTERNAL_SERVER_ERROR(500, "操作失败");
+        INTERNAL_SERVER_ERROR(500, "操作失败"),
+        /**
+         * Open api qps request limit reached
+         */
+        OPEN_API_QPS_REQUEST_LIMIT_REACHED(600, "请求达到限制");
 
         final int value;
 
