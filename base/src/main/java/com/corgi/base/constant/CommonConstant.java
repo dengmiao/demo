@@ -69,7 +69,7 @@ public interface CommonConstant {
         @Override
         public String toString() {
             return JSON.toJSONString(this).replaceAll("\"", "")
-                    + ("(value:" + this.getValue() + ", reasonPhrase:" + this.getReasonPhrase() + ")");
+                    + ("(value=" + this.getValue() + ", reasonPhrase=" + this.getReasonPhrase() + ")");
         }}
 
     //=========================实体公有属性==========================//
