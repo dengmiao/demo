@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface CurrentInterceptorHandler {
 
     /**
-     * 自定义全局的拦截处理
-     * true:表示放行，false:表示拦截
+     * 拦截器拦截后的反馈
      * @param request
      * @param response
      * @param handler

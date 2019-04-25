@@ -1,8 +1,11 @@
 package com.corgi.limit.interceptor;
 
+import com.corgi.limit.common.SpringContextUtil;
 import com.corgi.limit.core.RateLimiter;
-import com.corgi.limit.enums.CurrentEnum;
+import com.corgi.limit.core.RateLimiterCloud;
+import com.corgi.limit.core.RateLimiterSingle;
 import com.corgi.limit.handler.CurrentInterceptorHandler;
+import com.corgi.limit.interceptor.properties.CurrentProperties;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,16 +16,20 @@ import javax.servlet.http.HttpServletResponse;
  * @author: dengmiao
  * @create: 2019-04-22 11:40
  **/
-public class CurrentInterceptor implements HandlerInterceptor {
+public class DefaultCurrentInterceptor implements HandlerInterceptor {
 
-    private RateLimiter currentLimiter;
+    private RateLimiter rateLimiter;
     private boolean failFast;
     private CurrentInterceptorHandler interceptorHandler;
 
-    public CurrentInterceptor(RateLimiter currentLimiter, boolean failFast, CurrentInterceptorHandler handler) {
-        this.currentLimiter = currentLimiter;
-        this.failFast = failFast;
+    public DefaultCurrentInterceptor(CurrentProperties properties, CurrentInterceptorHandler handler) {
+        this.failFast = properties.isFailFast();
         this.interceptorHandler = handler;
+        if (properties.isCloudEnabled()){
+            rateLimiter = RateLimiterCloud.of(properties.getQps(), properties.getInitialDelay(), SpringContextUtil.getApplicationName(),properties.isOverflow());
+        }else {
+            rateLimiter = RateLimiterSingle.of(properties.getQps(), properties.getInitialDelay(),properties.isOverflow());
+        }
     }
 
     @Override
@@ -31,17 +38,17 @@ public class CurrentInterceptor implements HandlerInterceptor {
         if (failFast) {
             return tryAcquireFailed(request, response, handler);
         }else { //执行阻塞策略
-            return currentLimiter.tryAcquire();
+            return rateLimiter.tryAcquire();
         }
     }
 
     private boolean tryAcquireFailed(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //取到令牌
-        if (currentLimiter.tryAcquireFailed()){
+        if (rateLimiter.tryAcquireFailed()){
             return true;
         }else { //没取到令牌
             if (interceptorHandler == null) {
-                response.getWriter().print(CurrentEnum.MESSAGE.getMessage());
+                response.getWriter().print(RateLimiter.message);
             } else {
                 interceptorHandler.preHandle(request, response, handler);
             }

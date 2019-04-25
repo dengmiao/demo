@@ -11,7 +11,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 public interface CurrentAspectHandler {
 
     /**
-     * 自定义对CurrentLimiter注解的拦截处理
+     * CurrentLimiter注解拦截后的反馈
      *
      * @param pjp
      * @param rateLimiter

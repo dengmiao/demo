@@ -13,22 +13,27 @@ import org.springframework.stereotype.Component;
 public class CurrentProperties {
 
     /**
-     * Do you want to turn on the limiting current?
+     * Do you want to turn on the current limiting ?
      */
     private boolean enabled = false;
 
     /**
-     * Is the local current limiter on?
+     * Do you want to turn on the annotation current limiter?
      */
     private boolean partEnabled = true;
 
     /**
-     * qps
+     * Do you want to turn on the cluster current limiter?
      */
-    private long qps = 100;
+    private boolean cloudEnabled = false;
 
     /**
-     * Initialization delay time
+     * application qps：The number/SEC
+     */
+    private double qps = 100;
+
+    /**
+     * The delay time for the token to be put in for the first time.
      */
     private long initialDelay = 0;
 
@@ -37,8 +42,21 @@ public class CurrentProperties {
      */
     private boolean failFast = true;
 
+    /**
+     * Are request rates and frequency strictly controlled?
+     */
+    private boolean overflow = false;
+
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public boolean isOverflow() {
+        return overflow;
+    }
+
+    public void setOverflow(boolean overflow) {
+        this.overflow = overflow;
     }
 
     public void setEnabled(boolean enabled) {
@@ -53,11 +71,11 @@ public class CurrentProperties {
         this.partEnabled = partEnabled;
     }
 
-    public long getQps() {
+    public double getQps() {
         return qps;
     }
 
-    public void setQps(long qps) {
+    public void setQps(double qps) {
         this.qps = qps;
     }
 
@@ -75,5 +93,13 @@ public class CurrentProperties {
 
     public void setFailFast(boolean failFast) {
         this.failFast = failFast;
+    }
+
+    public boolean isCloudEnabled() {
+        return cloudEnabled;
+    }
+
+    public void setCloudEnabled(boolean cloudEnabled) {
+        this.cloudEnabled = cloudEnabled;
     }
 }

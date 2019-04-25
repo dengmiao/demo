@@ -1,9 +1,12 @@
 package com.corgi.limit.aspect;
 
 import com.corgi.limit.annotation.Limit;
+import com.corgi.limit.common.SpringContextUtil;
 import com.corgi.limit.core.RateLimiter;
-import com.corgi.limit.enums.CurrentEnum;
+import com.corgi.limit.core.RateLimiterCloud;
+import com.corgi.limit.core.RateLimiterSingle;
 import com.corgi.limit.handler.CurrentAspectHandler;
+import com.corgi.limit.interceptor.properties.CurrentProperties;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -36,6 +39,9 @@ public class CurrentAspect {
     @Autowired(required = false)
     private CurrentAspectHandler handler;
 
+    @Autowired
+    private CurrentProperties properties;
+
     /**
      * 声明切点
      */
@@ -52,13 +58,8 @@ public class CurrentAspect {
      */
     @Around("pointcut() && @annotation(currentLimiter)")
     public Object around(ProceedingJoinPoint pjp, Limit currentLimiter) throws Throwable {
-        //是否初始化限流器
-        String key = pjp.getSignature().toLongString();
-        if (!map.containsKey(key)) {
-            map.put(key, RateLimiter.of(currentLimiter.qps(), currentLimiter.initialDelay()));
-        }
-        //获取限流器
-        RateLimiter rateLimiter = map.get(key);
+        //初始化限流器
+        RateLimiter rateLimiter = initCurrentLimiting(pjp,currentLimiter);
         //执行快速失败
         if (currentLimiter.failFast()){
             return tryAcquireFailed(pjp, currentLimiter, rateLimiter);
@@ -72,8 +73,25 @@ public class CurrentAspect {
         //取到令牌
         if (rateLimiter.tryAcquireFailed()) {
             return pjp.proceed();
-        }else { //没取到令牌
-            return handler == null ? CurrentEnum.MESSAGE.getMessage() : handler.around(pjp,currentLimiter);
+        }else {
+            //没取到令牌
+            return handler == null ? RateLimiter.message : handler.around(pjp,currentLimiter);
         }
+    }
+
+    /**
+     * 初始化限流器
+     * 为了提高性能，不加同步锁，所以存在初始的误差。
+     */
+    private RateLimiter initCurrentLimiting(ProceedingJoinPoint pjp, Limit currentLimiter) {
+        String key = pjp.getSignature().toLongString();
+        if (!map.containsKey(key)) {
+            if (properties.isCloudEnabled()){
+                map.put(key, RateLimiterCloud.of(currentLimiter.qps(),currentLimiter.initialDelay(), SpringContextUtil.getApplicationName()+key,currentLimiter.overflow()));
+            }else {
+                map.put(key, RateLimiterSingle.of(currentLimiter.qps(), currentLimiter.initialDelay(),currentLimiter.overflow()));
+            }
+        }
+        return map.get(key);
     }
 }

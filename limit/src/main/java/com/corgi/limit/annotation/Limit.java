@@ -16,7 +16,7 @@ public @interface Limit {
     /**
      * 每秒并发量
      */
-    long qps() default 20;
+    double qps() default 20;
 
     /**
      * 初始延迟时间
@@ -27,4 +27,6 @@ public @interface Limit {
      * 开启快速失败/阻塞
      */
     boolean failFast() default true;
+
+    boolean overflow() default false;
 }

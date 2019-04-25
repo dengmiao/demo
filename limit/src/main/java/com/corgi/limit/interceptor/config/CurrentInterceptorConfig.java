@@ -1,8 +1,9 @@
 package com.corgi.limit.interceptor.config;
 
-import com.corgi.limit.core.RateLimiter;
 import com.corgi.limit.handler.CurrentInterceptorHandler;
-import com.corgi.limit.interceptor.CurrentInterceptor;
+import com.corgi.limit.handler.CurrentRuleHandler;
+import com.corgi.limit.interceptor.CustomCurrentInterceptor;
+import com.corgi.limit.interceptor.DefaultCurrentInterceptor;
 import com.corgi.limit.interceptor.properties.CurrentProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @description:
+ * @description: spring boot 2.0 拦截器
  * @author: dengmiao
  * @create: 2019-04-22 11:46
  **/
@@ -25,9 +26,16 @@ public class CurrentInterceptorConfig implements WebMvcConfigurer {
     @Autowired(required = false)
     private CurrentInterceptorHandler handler;
 
+    @Autowired(required = false)
+    private CurrentRuleHandler rule;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(new CurrentInterceptor(RateLimiter.of(properties.getQps(),properties.getInitialDelay()),properties.isFailFast(),handler)).addPathPatterns("/**");
+        //是否自定义规则
+        if (rule==null) {
+            registry.addInterceptor(new DefaultCurrentInterceptor(properties, handler)).addPathPatterns("/**");
+        }else {
+            registry.addInterceptor(new CustomCurrentInterceptor(properties, handler,rule)).addPathPatterns("/**");
+        }
     }
 }
