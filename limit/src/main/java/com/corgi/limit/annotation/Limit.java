@@ -28,5 +28,8 @@ public @interface Limit {
      */
     boolean failFast() default true;
 
+    /**
+     * 是否严格控制请求速率和次数，TRUE即切换为漏桶算法
+     */
     boolean overflow() default false;
 }
