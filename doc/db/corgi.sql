@@ -10,10 +10,34 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2019-04-19 17:04:49
+Date: 2019-04-26 16:17:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for sys_demo
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_demo`;
+CREATE TABLE `sys_demo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `del_flag` int(11) DEFAULT NULL,
+  `json` json DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_demo
+-- ----------------------------
+INSERT INTO `sys_demo` VALUES ('1', '1', '2019-04-26 12:52:27', '1', '2019-04-26 12:52:27', '0', '{\"age\": \"18\", \"name\": \"Bob\"}', 'Bob');
+INSERT INTO `sys_demo` VALUES ('2', null, null, null, null, null, '{\"age\": \"20\", \"name\": \"Tom\"}', 'Tom');
+INSERT INTO `sys_demo` VALUES ('3', null, null, null, null, null, '{\"age\": \"20\", \"name\": \"Tom\"}', 'Tom');
+INSERT INTO `sys_demo` VALUES ('4', null, null, null, null, null, '[{\"age\": \"20\", \"name\": \"Tom\"}, {\"sex\": \"男\", \"name\": \"Tom\"}]', 'Tom');
 
 -- ----------------------------
 -- Table structure for sys_dept
