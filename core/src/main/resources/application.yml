@@ -23,6 +23,8 @@ mybatis-plus:
     cache-enabled: false
     # show sql
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 配置mybaits自定义类型转换类所在的包
+  type-handlers-package: com.corgi.base.fastjson.handler
 spring:
   profiles:
     active: dev

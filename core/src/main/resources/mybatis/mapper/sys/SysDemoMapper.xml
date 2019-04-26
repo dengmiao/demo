@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.corgi.core.modules.sys.mapper.SysDemoMapper">
+
+    <resultMap id="baseResultMap" type="com.corgi.core.modules.sys.entity.SysDemo">
+        <id column="json" property="json" jdbcType="VARCHAR" typeHandler="com.corgi.base.fastjson.handler.MySqlJsonHandler"/>
+    </resultMap>
+
+    <select id="selectJson" resultMap="baseResultMap">
+        select * from sys_demo
+    </select>
+
+    <insert id="inset" parameterType="com.corgi.core.modules.sys.entity.SysDemo">
+        insert into sys_demo(json, name) value (#{json,jdbcType=OTHER,typeHandler=com.corgi.base.fastjson.handler.MySqlJsonHandler}, #{name})
+    </insert>
+</mapper>
