@@ -35,6 +35,26 @@ public class MySqlJsonHandler extends BaseTypeHandler<JSON> {
     }
 
     /**
+     * sqlJson 处理为JSONObject 或 JSONArray
+     * @param sqlJson
+     * @return
+     */
+    private JSON fromSqlJson(String sqlJson) {
+        if (null != sqlJson){
+            String blankSpace = " ";
+            if(JSON.isValidObject(sqlJson)) {
+                return JSONObject.parseObject(sqlJson);
+            }
+            // JSON.isValidArray(str)要去掉字符串的空格, 才能得到期望的结果
+            else if(JSON.isValidArray(sqlJson.replaceAll(blankSpace, ""))) {
+                return JSONObject.parseArray(sqlJson);
+            }
+            return null;
+        }
+        return null;
+    }
+
+    /**
      * 根据列名，获取可以为空的结果
      * @param resultSet
      * @param s
@@ -44,17 +64,7 @@ public class MySqlJsonHandler extends BaseTypeHandler<JSON> {
     @Override
     public JSON getNullableResult(ResultSet resultSet, String s) throws SQLException {
         String sqlJson = resultSet.getString(s);
-        if (null != sqlJson){
-            // JSON.isValidArray(str)要去掉字符串的空格, 才能得到期望的结果
-            String blankSpace = " ";
-            if(JSON.isValidObject(sqlJson)) {
-                return JSONObject.parseObject(sqlJson);
-            }else if(JSON.isValidArray(sqlJson.replaceAll(blankSpace, ""))) {
-                return JSONObject.parseArray(sqlJson);
-            }
-            return null;
-        }
-        return null;
+        return fromSqlJson(sqlJson);
     }
 
     /**
@@ -67,18 +77,12 @@ public class MySqlJsonHandler extends BaseTypeHandler<JSON> {
     @Override
     public JSON getNullableResult(ResultSet resultSet, int i) throws SQLException {
         String sqlJson = resultSet.getString(i);
-        if (null != sqlJson){
-            return JSONObject.parseObject(sqlJson);
-        }
-        return null;
+        return fromSqlJson(sqlJson);
     }
 
     @Override
     public JSON getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
         String sqlJson = callableStatement.getString(i);
-        if (null != sqlJson){
-            return JSONObject.parseObject(sqlJson);
-        }
-        return null;
+        return fromSqlJson(sqlJson);
     }
 }

@@ -3,13 +3,16 @@ package com.corgi.core.modules.sys.controller;
 import com.corgi.base.toolkit.ResultUtil;
 import com.corgi.base.vo.Result;
 import com.corgi.core.modules.sys.entity.SysUser;
+import com.corgi.core.modules.sys.mapper.SysDemoMapper;
 import com.corgi.limit.annotation.Limit;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -23,9 +26,12 @@ import java.util.HashMap;
 @Api(tags = "测试api")
 public class TestController {
 
+    @Resource
+    private SysDemoMapper sysDemoMapper;
+
     @RequestMapping("echo")
-    public Object echo() {
-        return new SysUser().setId(123456789876543210L).setUsername("test");
+    public Result echo() {
+        return new ResultUtil<>().setData(new SysUser().setId(123456789876543210L).setUsername("test"));
     }
 
     @RequestMapping("logout")
@@ -52,5 +58,10 @@ public class TestController {
         return new ResultUtil<>().setData(
           new SysUser().setId(123456789876543210L).setUsername("test").setBirthday(new Date())
         );
+    }
+
+    @GetMapping(value = "jsonType")
+    public Result jsonType() {
+        return new ResultUtil<>().setData(sysDemoMapper.selectJson());
     }
 }
