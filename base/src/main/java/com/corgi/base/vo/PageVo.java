@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @description: 分页请求参数
@@ -26,4 +27,8 @@ public class PageVo implements Serializable {
 
     @ApiModelProperty(value = "排序方式 asc/desc")
     private String order = "asc";
+
+    private String[] groupKey;
+
+    private List<OrderVo> orderVoList;
 }

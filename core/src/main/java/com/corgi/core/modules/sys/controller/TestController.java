@@ -1,7 +1,9 @@
 package com.corgi.core.modules.sys.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.corgi.base.toolkit.ResultUtil;
 import com.corgi.base.vo.Result;
+import com.corgi.core.modules.sys.entity.SysDemo;
 import com.corgi.core.modules.sys.entity.SysUser;
 import com.corgi.core.modules.sys.mapper.SysDemoMapper;
 import com.corgi.limit.annotation.Limit;
@@ -63,5 +65,16 @@ public class TestController {
     @GetMapping(value = "jsonType")
     public Result jsonType() {
         return new ResultUtil<>().setData(sysDemoMapper.selectJson());
+    }
+
+    @GetMapping("where")
+    public Result where() {
+        return new ResultUtil<>().setData(sysDemoMapper.selectListWhere(SysDemo.class," del_flag = 0"));
+    }
+
+    @GetMapping("wrapper")
+    public Result wrapper() {
+        QueryWrapper wrapper = new QueryWrapper<SysDemo>().eq("del_flag", 0).likeRight("name", "B").orderByDesc("create_time");
+        return new ResultUtil<>().setData(sysDemoMapper.selectList(wrapper));
     }
 }

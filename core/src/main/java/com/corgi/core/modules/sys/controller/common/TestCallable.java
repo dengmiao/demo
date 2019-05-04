@@ -14,18 +14,8 @@ public class TestCallable {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         long start = System.currentTimeMillis();
-        Callable<Double> doubleCallable = new Callable<Double>() {
-            @Override
-            public Double call() throws Exception {
-                return getInteger();
-            }
-        };
-        Callable<String> stringCallable = new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return getString();
-            }
-        };
+        Callable<Double> doubleCallable = () -> getDouble();
+        Callable<String> stringCallable = () -> getString();
 
         FutureTask<Double> doubleFutureTask = new FutureTask<>(doubleCallable);
         FutureTask<String> stringFutureTask = new FutureTask<>(stringCallable);
@@ -35,9 +25,13 @@ public class TestCallable {
 
         System.out.printf("%.2f %s\n", doubleFutureTask.get(), stringFutureTask.get());
         System.out.println("总耗时: " + (System.currentTimeMillis() - start));
+
+        long s = System.currentTimeMillis();
+        System.out.printf("%.2f %s\n", getDouble(), getString());
+        System.out.printf("总耗时: %s\n", System.currentTimeMillis() - s);
     }
 
-    public static double getInteger() throws InterruptedException {
+    public static double getDouble() throws InterruptedException {
         Thread.sleep(1000);
         return Math.random();
     }
