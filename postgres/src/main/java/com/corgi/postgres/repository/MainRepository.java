@@ -19,8 +19,6 @@ import java.util.List;
 @Component
 public class MainRepository {
 
-
-
     @Autowired
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
@@ -30,16 +28,16 @@ public class MainRepository {
      * @param c
      * @return
      */
-    public  List tagQuery(HashMap map,Class c) {
+    public List tagQuery(HashMap map,Class c) {
         if(map.size() < 1){
             return null;
         }
         EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
-        String sql = "select * from "+ GeneralConstants.ledgerSchema+"."+GeneralConstants.studyTable+" s where ";
+        String sql = "select * from "+ GeneralConstants.targetSchema+"."+GeneralConstants.targetTable+" s where ";
         StringBuilder content = new StringBuilder();
-        map.forEach((k,v)->{
-            content.append("s.tags->> '"+k+"' = '"+v+"' and ");
-        });
+        map.forEach((k,v)->
+            content.append("s.tags->> '"+k+"' = '"+v+"' and ")
+        );
         content.append(" 1=1");
         sql += content.toString();
         Query query = em.createNativeQuery(sql, c);

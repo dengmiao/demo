@@ -16,6 +16,6 @@ public class JsonbPostgresDialect extends PostgreSQL95Dialect {
 	public JsonbPostgresDialect() {
 		super();
         registerColumnType(Types.JAVA_OBJECT, "jsonb");
-        registerHibernateType( Types.ARRAY, StringType.class.getName());
+        registerHibernateType(Types.ARRAY, StringType.class.getName());
 	}
 }

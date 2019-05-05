@@ -18,7 +18,7 @@ import java.util.List;
 public class ListJsonConverter implements AttributeConverter<List<String>, String> {
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
-        if(attribute == null || attribute.size() == 0) return "[]";
+        if(attribute == null || attribute.size() == 0) {return "[]";}
         ObjectMapper mapper = new ObjectMapper();
         String json = null;
         try {

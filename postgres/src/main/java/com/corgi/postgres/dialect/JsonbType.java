@@ -23,6 +23,7 @@ import java.util.Properties;
 
 /**
  * 自定义jsonb数据类型
+ * 实现了Map映射PGObject(postgres对象类型),通过ObjectMapper来实现两个数据类型的转换
  * @description:
  * @author: dengmiao
  * @create: 2019-05-05 11:56
