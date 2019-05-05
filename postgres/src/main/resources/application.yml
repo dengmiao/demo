@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/postgres
+    username: postgres
+    password: root
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+  jpa:
+    show-sql: true
+    # 指定方言
+    database-platform: com.corgi.postgres.dialect.JsonbPostgresDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+
+logging:
+  level:
+    root: info
+server:
+  port: 6543
+  max-http-header-size: 8192
+  servlet:
+    context-path: /postgres

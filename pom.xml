@@ -20,6 +20,7 @@
         <module>core</module>
         <module>test</module>
         <module>limit</module>
+        <module>postgres</module>
     </modules>
 
     <properties>
