@@ -1,5 +1,6 @@
 package com.corgi.postgres.dialect;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.HibernateException;
 import org.hibernate.boot.registry.classloading.internal.ClassLoaderServiceImpl;
@@ -17,9 +18,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 自定义jsonb数据类型
@@ -30,56 +30,64 @@ import java.util.Properties;
  **/
 public class JsonbType implements UserType, ParameterizedType {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final ClassLoaderService classLoaderService = new ClassLoaderServiceImpl();
 
     public static final String CLASS = "CLASS";
 
+    public static final String JSONB_TYPE = "jsonb";
+
     private Class<?> jsonClassType;
 
     @Override
-    public Object nullSafeGet(ResultSet resultSet, String[] strings, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
-        // postgres对象类型
-        PGobject oo = (PGobject) resultSet.getObject(strings[0]);
-        if (oo.getValue() != null) {
-            try {
-                Object val = mapper.readValue(oo.getValue(), jsonClassType);
-                return mapper.readValue(oo.getValue(), jsonClassType);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-            return null;
+    public Object nullSafeGet(ResultSet resultSet, String[] names, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
+        try {
+            final String json = resultSet.getString(names[0]);
+            return json == null ? null : objectMapper.readValue(json, jsonClassType);
+        } catch (IOException e) {
+            throw new HibernateException(e);
         }
-
-        return new HashMap(8);
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
-        if (o == null) {
-            preparedStatement.setNull(i, Types.OTHER);
-        } else {
-            try {
-                preparedStatement.setObject(i, mapper.writeValueAsString(o), Types.OTHER);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+    public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+        try {
+            final String json = value == null ? null : objectMapper.writeValueAsString(value);
+            PGobject pgo = new PGobject();
+            pgo.setType(JSONB_TYPE);
+            pgo.setValue(json);
+            preparedStatement.setObject(index, pgo);
+        } catch (JsonProcessingException e) {
+            throw new HibernateException(e);
         }
     }
 
     @Override
     public Object deepCopy(Object originalValue) throws HibernateException {
-        if (originalValue != null) {
-            try {
-                System.out.println(mapper.readValue(mapper.writeValueAsString(originalValue), returnedClass()));
-                return mapper.readValue(mapper.writeValueAsString(originalValue), returnedClass());
-            } catch (IOException e) {
-                throw new HibernateException("Failed to deep copy object", e);
+        if (!(originalValue instanceof Collection)) {
+            return originalValue;
+        }
+
+        Collection<?> collection = (Collection) originalValue;
+        Collection collectionClone = CollectionFactory.newInstance(collection.getClass());
+
+        collectionClone.addAll(collection.stream().map(this::deepCopy).collect(Collectors.toList()));
+
+        return collectionClone;
+    }
+
+    static final class CollectionFactory {
+        @SuppressWarnings("unchecked")
+        static <E, T extends Collection<E>> T newInstance(Class<T> collectionClass) {
+            if (List.class.isAssignableFrom(collectionClass)) {
+                return (T) new ArrayList<E>();
+            } else if (Set.class.isAssignableFrom(collectionClass)) {
+                return (T) new HashSet<E>();
+            } else {
+                throw new IllegalArgumentException("Unsupported collection type : " + collectionClass);
             }
         }
-        return null;
     }
 
 
@@ -110,9 +118,7 @@ public class JsonbType implements UserType, ParameterizedType {
 
     @Override
     public int hashCode(Object x) throws HibernateException {
-        if (x == null) {
-            return 0;
-        }
+        assert (x != null);
 
         return x.hashCode();
     }

@@ -3,6 +3,7 @@ package com.corgi.postgres.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -13,12 +14,13 @@ import java.io.Serializable;
  * @create: 2019-05-05 11:56
  **/
 @Data
+@Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Name implements Serializable {
 
-    private String xing;
-    private String ming;
-    private String zi;
+    private String lastName;
+    private String firstName;
+    private String nickName;
     private String title;
 }

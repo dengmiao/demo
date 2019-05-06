@@ -30,34 +30,33 @@ public class PersonController {
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     @GetMapping
-    public Object test01(@RequestParam(defaultValue = "12344") String key, @RequestParam(defaultValue = "asdfasd")String value){
-        /*select * from public.person b where b.tags ->>'4545' = 'gfdgdfg'
-        select * from public.person b where b."name" ->> 'zi' = '孔明'*/
+    public Object test01(@RequestParam(defaultValue = "tag1") String key, @RequestParam(defaultValue = "value1")String value){
         return repository.selectMap(key,value);
     }
     @RequestMapping("add")
     public Object test02(){
         Person person = new Person();
-        Body body = new Body();
-        body.setWeight(62.0);
-        body.setStature(175.0);
-        body.setCranialCapacity(999999.9);
+        Body body = new Body()
+                .setStature(2.82).setWeight(62.0).setHeight(175.0);
         person.setBody(body);
-        Name name = new Name();
-        name.setMing("zhenyang");
-        name.setXing("lu");
-        name.setTitle("灵宝天尊");
-        name.setZi("孔明");
+        Name name = new Name()
+                .setLastName("miao").setFirstName("deng").setNickName("邓小四").setTitle("山支大哥");
         person.setName(name);
-        HashMap<String,String> map = new HashMap<String,String>(8);
-        map.put("12344","asdfasd");
-        map.put("4545","gfdgdfg");
+        HashMap<String,String> map = new HashMap<String,String>(8){
+            {
+                put("tag1","value1");
+                put("tag2","value2");
+            }
+        };
         person.setTags(map);
-        List<String> wifes = new ArrayList<>();
-        wifes.add("乐正绫");
-        wifes.add("双笙子");
-        wifes.add("柳梦璃");
-        person.setWifes(wifes);
+        List<String> wives = new ArrayList<String>(){
+            {
+                add("孟美岐");
+                add("御坂美琴");
+                add("西尔莎·罗南");
+            }
+        };
+        person.setWives(wives);
 
         return repository.save(person);
     }
@@ -69,7 +68,7 @@ public class PersonController {
     @GetMapping("test")
     public Object test05(){
         EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
-        String sql = "select * from public.person b where b.tags ->>'12344'= 'asdfasd'";
+        String sql = "select * from public.person b where b.tags ->>'tag1'= 'value1'";
         Query query = em.createNativeQuery(sql, Person.class);
         List resultList = query.getResultList();
         return resultList;

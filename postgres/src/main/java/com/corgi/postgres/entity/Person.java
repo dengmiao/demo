@@ -52,7 +52,7 @@ public class Person implements Serializable {
     private HashMap tags;
 
     @Convert(converter = ListJsonConverter.class)
-    private List<String> wifes;
+    private List<String> wives;
 
 }
 
