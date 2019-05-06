@@ -27,4 +27,14 @@ public class Singleton {
     public static Singleton getInstance() {
         return Factory.createInstance();
     }
+
+    public static void main(String[] args) {
+        // main/psvm
+        int time = 10;
+        // fori
+        for (int i = 0; i < time; i++) {
+            // sout
+            System.out.println(Singleton.getInstance());
+        }
+    }
 }
