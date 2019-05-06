@@ -40,7 +40,7 @@ public class PersonController {
                 .setStature(2.82).setWeight(62.0).setHeight(175.0);
         person.setBody(body);
         Name name = new Name()
-                .setLastName("miao").setFirstName("deng").setNickName("邓小四").setTitle("山支大哥");
+                .setLastName("miao").setFirstName("deng").setNickName("邓半仙").setTitle("山支大哥");
         person.setName(name);
         HashMap<String,String> map = new HashMap<String,String>(8){
             {
