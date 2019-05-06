@@ -1,12 +1,14 @@
 package com.corgi.reactive.domain;
 
+import java.io.Serializable;
+
 /**
  * @title: User
  * @description:
  * @author: dengmiao
  * @create: 2019-05-05 22:09
  **/
-public class User {
+public class User implements Serializable {
 
     private String id;
 

@@ -42,6 +42,7 @@ public class UserService {
      * @return
      */
     public Mono<User> findById(final String id) {
+        System.out.println(dataMap.get(id));
         return Mono.justOrEmpty(dataMap.get(id));
     }
 
