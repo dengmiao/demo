@@ -10,9 +10,6 @@
     api限流的stater
     
 ## postgres
-    springboot工程访问plsql示例
-    
-## reactive
-    springboot响应式 web-flux
+    springboot响应式 web-flux工程访问plsql示例
 
 ### 未完待续。。
