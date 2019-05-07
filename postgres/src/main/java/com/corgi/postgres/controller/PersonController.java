@@ -26,7 +26,7 @@ import java.util.List;
  * @create: 2019-05-05 11:56
  **/
 @RestController
-@RequestMapping("person")
+@RequestMapping("postgres/person")
 public class PersonController {
 
     @Autowired

@@ -13,5 +13,6 @@ public class PostgresApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PostgresApplication.class, args);
+        //new SpringApplicationBuilder(PostgresApplication.class).web(WebApplicationType.REACTIVE).run(args);
     }
 }

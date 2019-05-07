@@ -1,3 +1,10 @@
+server:
+  port: 6543
+  max-http-header-size: 8192
+  # web-flux因为没有DispatchServlet，已经不支持ContextPath了 QAQ
+  servlet:
+    context-path: /postgres
+
 spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/postgres
@@ -15,12 +22,8 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
+    open-in-view: true
 
 logging:
   level:
     root: info
-server:
-  port: 6543
-  max-http-header-size: 8192
-  servlet:
-    context-path: /postgres
