@@ -21,10 +21,11 @@
         <module>test</module>
         <module>limit</module>
         <module>postgres</module>
-        <module>reactive</module>
     </modules>
 
     <properties>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
     </properties>
 
@@ -40,9 +41,16 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
+        <!-- 先干掉,引起jpa查询的问题,待排查,反正也不喜欢在较复杂的工程加热部署 -->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
     </dependencies>

@@ -35,6 +35,11 @@ public class PersonController {
     @Autowired
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
+    @GetMapping("echo")
+    public Mono<String> echo() {
+        return Mono.just("hello postgres!");
+    }
+
     @GetMapping
     public Mono test01(@RequestParam(defaultValue = "tag1") String key, @RequestParam(defaultValue = "value1")String value){
         return personService.findByMap(key,value);
@@ -46,7 +51,7 @@ public class PersonController {
     }
 
     @RequestMapping("add")
-    public Mono<Person> test02(){
+    public Mono<Person> add(){
         Person person = new Person();
         Body body = new Body()
                 .setStature(2.82).setWeight(62.0).setHeight(175.0);
@@ -78,7 +83,7 @@ public class PersonController {
         return personService.findList().delayElements(Duration.ofSeconds(1));
     }
 
-    @GetMapping("test")
+    @GetMapping("test05")
     public Object test05(){
         EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
         String sql = "select * from public.person1 b where b.tags ->>'tag1'= 'value1'";

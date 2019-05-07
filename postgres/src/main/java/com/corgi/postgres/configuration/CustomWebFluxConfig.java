@@ -2,12 +2,15 @@ package com.corgi.postgres.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 /**
@@ -18,6 +21,8 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
  **/
 @Configuration
 public class CustomWebFluxConfig implements WebFluxConfigurer {
+
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 全局跨域配置，根据各自需求定义
@@ -48,5 +53,24 @@ public class CustomWebFluxConfig implements WebFluxConfigurer {
         CorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
         ((UrlBasedCorsConfigurationSource) corsConfigurationSource).registerCorsConfiguration("/**",corsConfiguration);
         return new CorsWebFilter(corsConfigurationSource);
+    }
+
+    /****
+     * 配置常用的转换器和格式化配置（与Spring MVC 5配置方式一样）
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        // 添加日期格式化转换
+        DateFormatter dateFormatter = new DateFormatter(DATE_FORMAT);
+        registry.addFormatter(dateFormatter);
+    }
+
+    /****
+     * 资源路径映射配置（与Spring MVC 5一样,只是引入的类不同）
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/public", "classpath:/static/");
+
     }
 }
