@@ -20,5 +20,5 @@ public interface PersonRepository extends JpaRepository<Person,Long> {
      * @return
      */
     @Query(value = "select * from public.person b where b.tags ->>?1 = ?2 ", nativeQuery = true)
-    List<Person> selectMap(String tag, String value);
+    List<Person> selectByMap(String tag, String value);
 }

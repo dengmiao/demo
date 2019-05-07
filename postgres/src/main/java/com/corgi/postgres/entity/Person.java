@@ -1,7 +1,7 @@
 package com.corgi.postgres.entity;
 
-import com.corgi.postgres.dialect.JsonbType;
-import com.corgi.postgres.dialect.ListJsonConverter;
+import com.corgi.postgres.convert.JsonbType;
+import com.corgi.postgres.convert.ListJsonConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

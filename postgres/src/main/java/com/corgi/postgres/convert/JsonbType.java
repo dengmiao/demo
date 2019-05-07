@@ -1,4 +1,4 @@
-package com.corgi.postgres.dialect;
+package com.corgi.postgres.convert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,16 +34,44 @@ public class JsonbType implements UserType, ParameterizedType {
 
     private static final ClassLoaderService classLoaderService = new ClassLoaderServiceImpl();
 
-    public static final String CLASS = "CLASS";
-
     public static final String JSONB_TYPE = "jsonb";
+
+    public static final String CLASS = "CLASS";
 
     private Class<?> jsonClassType;
 
     @Override
-    public Object nullSafeGet(ResultSet resultSet, String[] names, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
+    public void setParameterValues(Properties properties) {
+        final String clazz = (String) properties.get(CLASS);
+        jsonClassType = classLoaderService.classForName(clazz);
+    }
+
+    @Override
+    public int[] sqlTypes() {
+        return new int[]{Types.JAVA_OBJECT};
+    }
+
+    @Override
+    public Class returnedClass() {
+        return Map.class;
+    }
+
+    @Override
+    public boolean equals(Object o, Object o1) throws HibernateException {
+        return ObjectUtils.nullSafeEquals(o, o1);
+    }
+
+    @Override
+    public int hashCode(Object o) throws HibernateException {
+        assert (o != null);
+
+        return o.hashCode();
+    }
+
+    @Override
+    public Object nullSafeGet(ResultSet resultSet, String[] strings, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
         try {
-            final String json = resultSet.getString(names[0]);
+            final String json = resultSet.getString(strings[0]);
             return json == null ? null : objectMapper.readValue(json, jsonClassType);
         } catch (IOException e) {
             throw new HibernateException(e);
@@ -51,25 +79,25 @@ public class JsonbType implements UserType, ParameterizedType {
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
         try {
-            final String json = value == null ? null : objectMapper.writeValueAsString(value);
+            final String json = o == null ? null : objectMapper.writeValueAsString(o);
             PGobject pgo = new PGobject();
             pgo.setType(JSONB_TYPE);
             pgo.setValue(json);
-            preparedStatement.setObject(index, pgo);
+            preparedStatement.setObject(i, pgo);
         } catch (JsonProcessingException e) {
             throw new HibernateException(e);
         }
     }
 
     @Override
-    public Object deepCopy(Object originalValue) throws HibernateException {
-        if (!(originalValue instanceof Collection)) {
-            return originalValue;
+    public Object deepCopy(Object o) throws HibernateException {
+        if (!(o instanceof Collection)) {
+            return o;
         }
 
-        Collection<?> collection = (Collection) originalValue;
+        Collection<?> collection = (Collection) o;
         Collection collectionClone = CollectionFactory.newInstance(collection.getClass());
 
         collectionClone.addAll(collection.stream().map(this::deepCopy).collect(Collectors.toList()));
@@ -90,60 +118,29 @@ public class JsonbType implements UserType, ParameterizedType {
         }
     }
 
-
-    @Override
-    public Serializable disassemble(Object value) throws HibernateException {
-        Object copy = deepCopy(value);
-        if (copy instanceof Serializable) {
-            return (Serializable) copy;
-        }
-        throw new SerializationException(
-                String.format("Cannot serialize '%s', %s is not Serializable.", value, value.getClass()), null);
-    }
-
-    @Override
-    public Object assemble(Serializable cached, Object owner) throws HibernateException {
-        return deepCopy(cached);
-    }
-
-    @Override
-    public Object replace(Object original, Object target, Object owner) throws HibernateException {
-        return deepCopy(original);
-    }
-
     @Override
     public boolean isMutable() {
         return true;
     }
 
     @Override
-    public int hashCode(Object x) throws HibernateException {
-        assert (x != null);
-
-        return x.hashCode();
-    }
-
-
-    @Override
-    public boolean equals(Object x, Object y) throws HibernateException {
-        return ObjectUtils.nullSafeEquals(x, y);
+    public Serializable disassemble(Object o) throws HibernateException {
+        Object copy = deepCopy(o);
+        if (copy instanceof Serializable) {
+            return (Serializable) copy;
+        }
+        throw new SerializationException(
+                String.format("Cannot serialize '%s', %s is not Serializable.", o, o.getClass()), null);
     }
 
     @Override
-    public Class<?> returnedClass() {
-        return Map.class;
+    public Object assemble(Serializable serializable, Object o) throws HibernateException {
+        return deepCopy(serializable);
     }
 
     @Override
-    public int[] sqlTypes() {
-        return new int[]{Types.JAVA_OBJECT};
-    }
-
-    @Override
-    public void setParameterValues(Properties parameters) {
-        final String clazz = (String) parameters.get(CLASS);
-        jsonClassType = classLoaderService.classForName(clazz);
-
+    public Object replace(Object o, Object o1, Object o2) throws HibernateException {
+        return deepCopy(o);
     }
 
 }

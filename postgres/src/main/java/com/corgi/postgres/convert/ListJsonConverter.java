@@ -1,4 +1,4 @@
-package com.corgi.postgres.dialect;
+package com.corgi.postgres.convert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +16,7 @@ import java.util.List;
  **/
 @Converter
 public class ListJsonConverter implements AttributeConverter<List<String>, String> {
+
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
         if(attribute == null || attribute.size() == 0) {return "[]";}
