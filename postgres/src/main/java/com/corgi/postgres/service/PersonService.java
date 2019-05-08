@@ -30,10 +30,8 @@ public class PersonService {
         return repository.save(person);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public Optional<Person> findById(final Long id) {
-        Person person = repository.getOne(id);
-        System.out.println(person);
+        repository.getOne(id);
         return repository.findById(id);
     }
 
