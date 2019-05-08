@@ -11,6 +11,6 @@
     </select>
 
     <insert id="inset" parameterType="com.corgi.core.modules.sys.entity.SysDemo">
-        insert into sys_demo(json, name) value (#{json,jdbcType=OTHER,typeHandler=com.corgi.base.fastjson.handler.MySqlJsonHandler}, #{name})
+        insert into sys_demo(json, name) value (#{json,jdbcType=OTHER,typeHandler=com.corgi.base.mybatis.handler.MySqlJsonHandler}, #{name})
     </insert>
 </mapper>
