@@ -82,11 +82,19 @@ public class Result<T> implements Serializable {
     }
 
     public static Result<Object> ok(Object obj) {
-        Result<Object> r = new Result<Object>();
+        Result<Object> r = new Result<>();
         r.setSuccess(true);
         r.setCode(OK.getValue());
         r.setMessage(OK.getReasonPhrase());
         r.setResult(obj);
+        return r;
+    }
+
+    public static Result<Void> ok() {
+        Result<Void> r = new Result<>();
+        r.setSuccess(true);
+        r.setCode(OK.getValue());
+        r.setMessage(OK.getReasonPhrase());
         return r;
     }
 }
