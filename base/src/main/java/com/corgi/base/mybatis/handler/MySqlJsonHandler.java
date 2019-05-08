@@ -1,4 +1,4 @@
-package com.corgi.base.ibatis.handler;
+package com.corgi.base.mybatis.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

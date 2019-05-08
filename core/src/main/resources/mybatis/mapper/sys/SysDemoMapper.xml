@@ -3,7 +3,7 @@
 <mapper namespace="com.corgi.core.modules.sys.mapper.SysDemoMapper">
 
     <resultMap id="baseResultMap" type="com.corgi.core.modules.sys.entity.SysDemo">
-        <id column="json" property="json" jdbcType="VARCHAR" typeHandler="com.corgi.base.fastjson.handler.MySqlJsonHandler"/>
+        <id column="json" property="json" jdbcType="VARCHAR" typeHandler="com.corgi.base.mybatis.handler.MySqlJsonHandler"/>
     </resultMap>
 
     <select id="selectJson" resultMap="baseResultMap">
