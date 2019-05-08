@@ -93,11 +93,11 @@ public class PersonController {
         return Result.ok(resultList);
     }
 
-    @PutMapping
+    @PutMapping("test06")
     public Object test06() {
         return null;
     }
-    @DeleteMapping
+    @DeleteMapping("test07")
     public Object test07(){
         return null;
     }
