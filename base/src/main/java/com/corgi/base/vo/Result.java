@@ -1,5 +1,6 @@
 package com.corgi.base.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.corgi.base.constant.CommonConstant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -45,10 +46,11 @@ public class Result<T> implements Serializable {
     private long timestamp = System.currentTimeMillis();
 
     @JsonIgnore
+    @JSONField(serialize=false)
     public static final CommonConstant.HttpState OK = CommonConstant.HttpState.OK;
 
     @JsonIgnore
-    public static final CommonConstant.HttpState ERROR = CommonConstant.HttpState.INTERNAL_SERVER_ERROR;
+    public static transient final CommonConstant.HttpState ERROR = CommonConstant.HttpState.INTERNAL_SERVER_ERROR;
 
     public void error500(String message) {
         this.message = message;
