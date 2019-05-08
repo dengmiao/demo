@@ -4,6 +4,7 @@ import com.corgi.base.constant.CommonConstant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.reactivestreams.Publisher;
 
 import java.io.Serializable;
 
@@ -83,6 +84,15 @@ public class Result<T> implements Serializable {
 
     public static Result<Object> ok(Object obj) {
         Result<Object> r = new Result<>();
+        r.setSuccess(true);
+        r.setCode(OK.getValue());
+        r.setMessage(OK.getReasonPhrase());
+        r.setResult(obj);
+        return r;
+    }
+
+    public static Result ok(Publisher obj) {
+        Result<Publisher> r = new Result<>();
         r.setSuccess(true);
         r.setCode(OK.getValue());
         r.setMessage(OK.getReasonPhrase());
