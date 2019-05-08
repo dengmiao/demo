@@ -2,6 +2,7 @@ package com.corgi.postgres.entity;
 
 import com.corgi.postgres.convert.JsonbType;
 import com.corgi.postgres.convert.ListJsonConverter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ import java.util.List;
         @TypeDef(name = "JsonbTypeMap", typeClass = JsonbType.class, parameters = {
                 @org.hibernate.annotations.Parameter(name = JsonbType.CLASS, value = "java.util.HashMap")}),
 })
+@JsonIgnoreProperties(value={"hibernateLazyInitializer"})
 public class Person implements Serializable {
 
     @Id

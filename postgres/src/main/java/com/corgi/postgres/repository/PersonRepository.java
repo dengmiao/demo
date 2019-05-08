@@ -14,7 +14,7 @@ import java.util.List;
  **/
 public interface PersonRepository extends JpaRepository<Person,Long> {
     /**
-     * selectMap
+     * 基于本地sql查询
      * @param tag
      * @param value
      * @return

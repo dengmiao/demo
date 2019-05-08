@@ -1,5 +1,7 @@
 package com.corgi.postgres.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.reactivestreams.Publisher;
 import org.springframework.core.ResolvableType;
 import org.springframework.http.MediaType;
@@ -37,15 +39,21 @@ public class JsonHttpMessageWriter implements HttpMessageWriter<Map<String, Obje
     }
 
     private String transform2Json(Map<String, Object> sourceMap) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(sourceMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return "{" +
                 "\"code\":" +
                 sourceMap.getOrDefault("code", 500) +
                 "," +
-                "\"msg\":\"" +
-                sourceMap.getOrDefault("msg", "") +
+                "\"message\":\"" +
+                sourceMap.getOrDefault("message", "") +
                 "\"," +
                 "\"data\":\"" +
-                sourceMap.getOrDefault("data", "") +
+                sourceMap.getOrDefault("data", null) +
                 "\"}";
     }
 }

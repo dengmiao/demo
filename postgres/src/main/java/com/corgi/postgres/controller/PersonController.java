@@ -1,5 +1,6 @@
 package com.corgi.postgres.controller;
 
+import com.corgi.base.vo.Result;
 import com.corgi.postgres.entity.Body;
 import com.corgi.postgres.entity.Name;
 import com.corgi.postgres.entity.Person;
@@ -36,22 +37,22 @@ public class PersonController {
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     @GetMapping("echo")
-    public Mono<String> echo() {
-        return Mono.just("hello postgres!");
+    public Mono<Result> echo() {
+        return Mono.just(Result.ok((Object) "hello postgres!"));
     }
 
     @GetMapping
-    public Mono test01(@RequestParam(defaultValue = "tag1") String key, @RequestParam(defaultValue = "value1")String value){
-        return personService.findByMap(key,value);
+    public Mono<Result> test01(@RequestParam(defaultValue = "tag1") String key, @RequestParam(defaultValue = "value1")String value){
+        return Mono.just(Result.ok(personService.findByMap(key,value)));
     }
 
     @GetMapping("getById/{id}/")
-    public Mono<Person> getById(@PathVariable("id") final Long id) {
-        return personService.findById(id);
+    public Mono<Result> getById(@PathVariable("id") final Long id) {
+        return Mono.just(Result.ok(personService.findById(id)));
     }
 
     @RequestMapping("add")
-    public Mono<Person> add(){
+    public Mono<Result> add(){
         Person person = new Person();
         Body body = new Body()
                 .setStature(2.82).setWeight(62.0).setHeight(175.0);
@@ -75,21 +76,21 @@ public class PersonController {
         };
         person.setWives(wives);
 
-        return personService.save(person);
+        return Mono.just(Result.ok(personService.save(person)));
     }
 
     @GetMapping(value = "list", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Person> getList() {
-        return personService.findList().delayElements(Duration.ofSeconds(1));
+        return Flux.fromIterable(personService.findList()).delayElements(Duration.ofSeconds(1));
     }
 
     @GetMapping("test05")
-    public Object test05(){
+    public Result<Object> test05(){
         EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
         String sql = "select * from public.person1 b where b.tags ->>'tag1'= 'value1'";
         Query query = em.createNativeQuery(sql, Person.class);
         List resultList = query.getResultList();
-        return resultList;
+        return Result.ok(resultList);
     }
 
     @PutMapping

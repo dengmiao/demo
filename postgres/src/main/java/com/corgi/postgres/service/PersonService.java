@@ -7,6 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * @title: PersonService
  * @description:
@@ -23,21 +26,22 @@ public class PersonService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Mono<Person> save(Person person) {
-        return Mono.justOrEmpty(repository.save(person));
+    public Person save(Person person) {
+        return repository.save(person);
     }
 
-    public Mono<Person> findById(final Long id) {
-        /*Person person = repository.getOne(id);
-        System.out.println(person);*/
-        return Mono.justOrEmpty(repository.findById(id));
+    @Transactional(rollbackFor = Exception.class)
+    public Optional<Person> findById(final Long id) {
+        Person person = repository.getOne(id);
+        System.out.println(person);
+        return repository.findById(id);
     }
 
-    public Mono findByMap(String tag, String value) {
-        return Mono.justOrEmpty(repository.selectByMap(tag, value));
+    public List<Person> findByMap(String tag, String value) {
+        return repository.selectByMap(tag, value);
     }
 
-    public Flux<Person> findList() {
-        return Flux.fromIterable(repository.findAll());
+    public List<Person> findList() {
+        return repository.findAll();
     }
 }
