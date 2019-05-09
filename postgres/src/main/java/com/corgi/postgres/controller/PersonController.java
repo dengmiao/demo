@@ -4,8 +4,8 @@ import com.corgi.base.vo.Result;
 import com.corgi.postgres.entity.Body;
 import com.corgi.postgres.entity.Name;
 import com.corgi.postgres.entity.Person;
-import com.corgi.postgres.repository.PersonRepository;
 import com.corgi.postgres.service.PersonService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -19,6 +19,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -26,6 +27,7 @@ import java.util.List;
  * @author: dengmiao
  * @create: 2019-05-05 11:56
  **/
+@Slf4j
 @RestController
 @RequestMapping("postgres/person")
 public class PersonController {
@@ -36,12 +38,38 @@ public class PersonController {
     @Autowired
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
-    @GetMapping("echo")
-    public Mono<Result> echo() {
-        return Mono.just(Result.ok((Object) "hello postgres!"));
+    @GetMapping("block")
+    public Result block() {
+        log.info("block--start");
+        Result result = Result.ok(doQuery());
+        log.info("block--end");
+        return result;
     }
 
-    @GetMapping
+    @GetMapping("reactive")
+    public Mono<Result> reactive() {
+        log.info("reactive--start");
+        // 惰性求值
+        Mono<Result> mono = Mono.fromSupplier(() -> Result.ok(doQuery()));
+        log.info("reactive--end");
+        return mono;
+    }
+
+    @PostMapping("void")
+    public Mono<Result> Void() {
+        return Mono.just(Result.ok());
+    }
+
+    private Object doQuery() {
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "hello postgres!";
+    }
+
+    @GetMapping("test01")
     public Mono<Result> test01(@RequestParam(defaultValue = "tag1") String key, @RequestParam(defaultValue = "value1")String value){
         return Mono.just(Result.ok(personService.findByMap(key,value)));
     }
