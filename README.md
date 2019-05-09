@@ -13,3 +13,4 @@
     springboot响应式 web-flux工程访问plsql示例
 
 ### 未完待续。。
+-Xmx2048m -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=768m -Xss2m
