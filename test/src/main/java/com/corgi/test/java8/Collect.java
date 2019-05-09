@@ -1,14 +1,12 @@
 package com.corgi.test.java8;
 
+import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -31,10 +29,19 @@ public class Collect {
 
     public static void main(String[] args) {
         Map<String, Person> map = people.stream().collect(Collectors.toMap(Person::getName, a -> a,(k1, k2)->k1));
+        // 取得年龄列表
+        Set<Integer> ageSet = people.stream().map(Person::getAge).collect(Collectors.toCollection(TreeSet::new));
+        System.out.println("年龄分布: " + ageSet);
         System.out.println(map);
         // 汇总信息 (p) -> p.age
         IntSummaryStatistics intSummaryStatistics = people.stream().collect(Collectors.summarizingInt(Person::getAge));
         System.out.println("年龄汇总: " + intSummaryStatistics);
+        // 分块（特殊的分组）
+        Map<Boolean, List<Person>> genders1 = people.stream().collect(Collectors.partitioningBy(s -> s.getGender() == Gender.FEMALE ));
+        System.out.println("性别分布: " + JSONUtil.formatJsonStr(JSONUtil.toJsonPrettyStr(genders1)));
+        // 分组
+        Map<Grade, Long> genders2 = people.stream().collect(Collectors.groupingBy(Person::getGrade, Collectors.counting()));
+        System.out.println("班级分布" + JSONUtil.formatJsonStr(JSONUtil.toJsonPrettyStr(genders2)));
     }
 }
 
