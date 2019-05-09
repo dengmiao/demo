@@ -1,4 +1,4 @@
-package com.corgi.core.modules.sys.controller.common;
+package com.corgi.test.concurrent;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
