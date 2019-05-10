@@ -21,6 +21,7 @@
         <module>test</module>
         <module>limit</module>
         <module>postgres</module>
+        <module>mongodb</module>
     </modules>
 
     <properties>
