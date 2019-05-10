@@ -29,10 +29,10 @@ public class Collect {
 
     public static void main(String[] args) {
         Map<String, Person> map = people.stream().collect(Collectors.toMap(Person::getName, a -> a,(k1, k2)->k1));
+        System.out.println(map);
         // 取得年龄列表
         Set<Integer> ageSet = people.stream().map(Person::getAge).collect(Collectors.toCollection(TreeSet::new));
         System.out.println("年龄分布: " + ageSet);
-        System.out.println(map);
         // 汇总信息 (p) -> p.age
         IntSummaryStatistics intSummaryStatistics = people.stream().collect(Collectors.summarizingInt(Person::getAge));
         System.out.println("年龄汇总: " + intSummaryStatistics);
