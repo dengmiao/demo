@@ -40,18 +40,18 @@ public class PersonController {
 
     @GetMapping("block")
     public Result block() {
-        log.info("block--start");
+        long start = System.currentTimeMillis();
         Result result = Result.ok(doQuery());
-        log.info("block--end");
+        log.info("block: {}", System.currentTimeMillis() - start);
         return result;
     }
 
     @GetMapping("reactive")
     public Mono<Result> reactive() {
-        log.info("reactive--start");
+        long start = System.currentTimeMillis();
         // 惰性求值
         Mono<Result> mono = Mono.fromSupplier(() -> Result.ok(doQuery()));
-        log.info("reactive--end");
+        log.info("reactive: {}", System.currentTimeMillis() - start);
         return mono;
     }
 
