@@ -2,6 +2,7 @@ package com.corgi.mongodb.controller;
 
 import com.corgi.mongodb.entity.User;
 import com.corgi.mongodb.repository.UserRepository;
+import com.corgi.mongodb.util.CheckUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,8 @@ public class UserController {
 
     @PostMapping("add")
     public Mono<User> addUser(@Valid @RequestBody User user) {
+        user.setId(null);
+        CheckUtil.checkName(user.getName());
         return this.userRepository.save(user);
     }
 
@@ -52,6 +55,7 @@ public class UserController {
 
     @PutMapping("edit/{id}")
     public Mono<ResponseEntity<User>> editUser(@PathVariable String id, @Valid @RequestBody User user) {
+        CheckUtil.checkName(user.getName());
         return this.userRepository.findById(id)
                 .flatMap(u -> {
                     u.setAge(user.getAge());

@@ -1,5 +1,6 @@
 package com.corgi.mongodb.advice;
 
+import com.corgi.mongodb.exception.CheckException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +19,15 @@ public class CheckAdvice {
     @ExceptionHandler(WebExchangeBindException.class)
     public ResponseEntity<String> handleBindException(WebExchangeBindException e) {
         return new ResponseEntity<>(toStr(e), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CheckException.class)
+    public ResponseEntity<String> handleCheckException(CheckException e) {
+        return new ResponseEntity<>(toStr(e), HttpStatus.BAD_REQUEST);
+    }
+
+    private String toStr(CheckException e) {
+        return e.getFieldName() + ": 错误的值 " + e.getFieldValue();
     }
 
     /**

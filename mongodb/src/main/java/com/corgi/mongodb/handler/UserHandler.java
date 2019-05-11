@@ -2,6 +2,7 @@ package com.corgi.mongodb.handler;
 
 import com.corgi.mongodb.entity.User;
 import com.corgi.mongodb.repository.UserRepository;
+import com.corgi.mongodb.util.CheckUtil;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -29,9 +30,16 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> createUser(ServerRequest request) {
+        // block() 会阻塞线程
         Mono<User> user = request.bodyToMono(User.class);
-        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(this.userRepository.saveAll(user), User.class);
+
+        return user.flatMap(u -> {
+            // 数据校验
+            CheckUtil.checkName(u.getName());
+
+            return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body(this.userRepository.save(u), User.class);
+        });
     }
 
     public Mono<ServerResponse> deleteUser(ServerRequest request) {
