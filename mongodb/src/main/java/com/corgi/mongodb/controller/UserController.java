@@ -18,7 +18,7 @@ import javax.validation.Valid;
  * @create: 2019-05-10 15:21
  **/
 @RestController
-@RequestMapping("mongodb/user")
+@RequestMapping("mongodb/controller/user")
 public class UserController {
 
     private final UserRepository userRepository;
