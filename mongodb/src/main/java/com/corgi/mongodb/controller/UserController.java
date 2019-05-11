@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 /**
  * @title: UserController
  * @description:
@@ -36,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("add")
-    public Mono<User> addUser(@RequestBody User user) {
+    public Mono<User> addUser(@Valid @RequestBody User user) {
         return this.userRepository.save(user);
     }
 
@@ -49,7 +51,7 @@ public class UserController {
     }
 
     @PutMapping("edit/{id}")
-    public Mono<ResponseEntity<User>> editUser(@PathVariable String id, @RequestBody User user) {
+    public Mono<ResponseEntity<User>> editUser(@PathVariable String id, @Valid @RequestBody User user) {
         return this.userRepository.findById(id)
                 .flatMap(u -> {
                     u.setAge(user.getAge());
