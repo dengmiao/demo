@@ -7,21 +7,42 @@ import com.corgi.core.modules.sys.entity.SysDemo;
 import com.corgi.core.modules.sys.mapper.SysDemoMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureMockMvc
 public class CoreApplicationTests {
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Resource
     SysDemoMapper demoMapper;
 
     @Test
     public void contextLoads() {
+    }
+
+    @Test
+    public void apiTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/limited"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+        int status = response.getStatus();
+        System.out.println(status);
     }
 
     @Test
