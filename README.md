@@ -10,7 +10,7 @@
     api限流的stater
 
 ## mongodb
-    springboot2 整合mongodb
+    springboot2 webfluxu 整合mongodb
     
 ## postgres
     springboot响应式 web-flux工程访问plsql示例
