@@ -27,6 +27,9 @@ public class TreeService {
             add(new Tree().setId(6).setName("三级菜单1-5-6").setPId(5));
             add(new Tree().setId(7).setName("二级菜单2-7").setPId(2));
             add(new Tree().setId(8).setName("二级菜单1-5-6-8").setPId(6));
+            add(new Tree().setId(9).setName("二级菜单1-5-6-8-9").setPId(8));
+            add(new Tree().setId(10).setName("二级菜单1-5-6-8-9-10").setPId(9));
+            add(new Tree().setId(11).setName("二级菜单1-5-6-8-9-10-11").setPId(10));
         }
     };
 
@@ -34,7 +37,7 @@ public class TreeService {
      * 构建层次结构的树
      * @return
      */
-    public List<Tree> buildTree() {
+    public List<Tree> tailTree() {
         // 过滤根节点
         List<Tree> root = findByPId(0);
         iterate(root);
@@ -57,8 +60,28 @@ public class TreeService {
         return TailCalls.done(null);
     }
 
+    public List<Tree> recursiveTree() {
+        // 过滤根节点
+        List<Tree> root = findByPId(0);
+        recursive(root);
+        return root;
+    }
+
+    public void recursive(List<Tree> data) {
+        for(Tree tree : data) {
+            List<Tree> children = findByPId(tree.getId());
+            recursive(children);
+            tree.setChildren(children);
+        }
+    }
+
     public static void main(String[] args) {
         TreeService service = new TreeService();
-        System.out.println(JSONUtil.formatJsonStr(JSONUtil.toJsonStr(service.buildTree())));
+        long s1 = System.currentTimeMillis();
+        System.out.println(JSONUtil.formatJsonStr(JSONUtil.toJsonStr(service.tailTree())));
+        System.out.println("尾递归: " + (System.currentTimeMillis() - s1));
+        long s2 = System.currentTimeMillis();
+        System.out.println(JSONUtil.formatJsonStr(JSONUtil.toJsonStr(service.recursiveTree())));
+        System.out.println("线性递归: " + (System.currentTimeMillis() - s2));
     }
 }
