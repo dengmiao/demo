@@ -1,5 +1,6 @@
 package com.corgi.mongodb.controller;
 
+import com.corgi.base.vo.Result;
 import com.corgi.mongodb.entity.User;
 import com.corgi.mongodb.repository.UserRepository;
 import com.corgi.mongodb.util.CheckUtil;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 
 /**
  * @title: UserController
- * @description:
+ * @description: Mono<ResponseEntity<Result<?>>> / Flux<?>
  * @author: dengmiao
  * @create: 2019-05-10 15:21
  **/
@@ -39,22 +40,24 @@ public class UserController {
     }
 
     @PostMapping("add")
-    public Mono<User> addUser(@Valid @RequestBody User user) {
+    public Mono<ResponseEntity<Result<?>>> addUser(@Valid @RequestBody User user) {
         user.setId(null);
         CheckUtil.checkName(user.getName());
-        return this.userRepository.save(user);
+        return this.userRepository.save(user)
+                .flatMap(u -> Mono.just(new ResponseEntity<>(Result.ok(u), HttpStatus.OK)));
+        //return this.userRepository.save(user);
     }
 
     @DeleteMapping("delete/{id}")
-    public Mono<ResponseEntity<Void>> deleteUser(@PathVariable String id) {
+    public Mono<ResponseEntity<Result>> deleteUser(@PathVariable String id) {
         return this.userRepository.findById(id)
                 // 需要操作数据 用flatMap, 不需要操作数据 只是转换数据 用map
-                .flatMap(user -> this.userRepository.delete(user).then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK))))
-                .defaultIfEmpty(new ResponseEntity(HttpStatus.NOT_FOUND));
+                .flatMap(user -> this.userRepository.delete(user).then(Mono.just(new ResponseEntity<>(Result.ok(), HttpStatus.OK))))
+                .defaultIfEmpty(new ResponseEntity(Result.error(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()), HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("edit/{id}")
-    public Mono<ResponseEntity<User>> editUser(@PathVariable String id, @Valid @RequestBody User user) {
+    public Mono<ResponseEntity<Result<User>>> editUser(@PathVariable String id, @Valid @RequestBody User user) {
         CheckUtil.checkName(user.getName());
         return this.userRepository.findById(id)
                 .flatMap(u -> {
@@ -63,15 +66,15 @@ public class UserController {
                     u.setSynopsis(user.getSynopsis());
                     return this.userRepository.save(u);
                 })
-                .map(u -> new ResponseEntity<>(u, HttpStatus.OK))
-                .defaultIfEmpty(new ResponseEntity(HttpStatus.NOT_FOUND));
+                .map(u -> new ResponseEntity<>(Result.ok(u), HttpStatus.OK))
+                .defaultIfEmpty(new ResponseEntity(Result.error(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()), HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("getById/{id}")
-    public Mono<ResponseEntity<User>> getById(@PathVariable String id) {
+    public Mono<ResponseEntity<Result<User>>> getById(@PathVariable String id) {
         return this.userRepository.findById(id)
-                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-                .defaultIfEmpty(new ResponseEntity(HttpStatus.NOT_FOUND));
+                .map(user -> new ResponseEntity<>(Result.ok(user), HttpStatus.OK))
+                .defaultIfEmpty(new ResponseEntity(Result.error(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()), HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("getByAge/{start}/{end}")
