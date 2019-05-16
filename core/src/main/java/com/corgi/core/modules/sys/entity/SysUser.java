@@ -9,6 +9,7 @@ import com.corgi.base.base.BaseEntity;
 import com.corgi.base.aspect.CustomSerializer;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ import java.util.List;
 @Entity
 @Table(name = "sys_user")
 @TableName(value = "sys_user")
+@Where(clause = "del_flag = 0")
 public class SysUser extends BaseEntity<Long> {
 
     @Id

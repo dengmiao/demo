@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.corgi.base.base.BaseEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 @Table(name = "sys_dict_item")
 @TableName(value = "sys_dict_item")
 @org.hibernate.annotations.Table(appliesTo = "sys_dict_item",comment = "字典分项")
+@Where(clause = "del_flag = 0")
 public class SysDictItem extends BaseEntity<Long> {
 
     /**

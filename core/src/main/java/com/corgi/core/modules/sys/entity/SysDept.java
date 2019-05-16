@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.corgi.base.base.BaseEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 @Table(name = "sys_dept")
 @TableName(value = "sys_dept")
 @org.hibernate.annotations.Table(appliesTo = "sys_dept",comment = "组织机构")
+@Where(clause = "del_flag = 0")
 public class SysDept extends BaseEntity<Long> {
 
     /**

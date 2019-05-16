@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.corgi.core.modules.sys.entity.SysDemo;
+import com.corgi.core.modules.sys.entity.SysUser;
 import com.corgi.core.modules.sys.mapper.SysDemoMapper;
+import com.corgi.core.modules.sys.repository.SysUserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,16 @@ public class CoreApplicationTests {
     @Resource
     SysDemoMapper demoMapper;
 
+    @Autowired
+    SysUserRepository userRepository;
+
     @Test
     public void contextLoads() {
+    }
+
+    @Test
+    public void logicDeleteQuery() {
+        System.out.println(userRepository.findAll());
     }
 
     @Test

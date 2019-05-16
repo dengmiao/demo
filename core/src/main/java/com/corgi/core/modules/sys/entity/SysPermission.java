@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.corgi.base.base.BaseEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_permission")
 @TableName("sys_permission")
+@Where(clause = "del_flag = 0")
 public class SysPermission extends BaseEntity<Long> {
 
     /**
