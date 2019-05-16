@@ -26,4 +26,9 @@ public class AuthenticationBean {
      * 记住我
      */
     private boolean rememberMe;
+
+    /**
+     * 登录类型 account
+     */
+    private String type;
 }
