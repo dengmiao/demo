@@ -2,6 +2,8 @@ package com.corgi.core.modules.sys.controller.common;
 
 import com.corgi.base.toolkit.ResultUtil;
 import com.corgi.base.vo.Result;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SecurityController {
 
     @RequestMapping(value = "/needLogin",method = RequestMethod.GET)
-    public Result<Object> needLogin(){
-        return new ResultUtil<>().setErrorMsg(401, "您还未登录");
+    public ResponseEntity<Result<Object>> needLogin(){
+        return new ResponseEntity<>(new ResultUtil<>().setErrorMsg(401, "您还未登录"), HttpStatus.UNAUTHORIZED);
     }
 }

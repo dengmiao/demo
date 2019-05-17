@@ -2,6 +2,8 @@ package com.corgi.core.modules.sys.controller.common;
 
 import com.corgi.base.toolkit.ResultUtil;
 import com.corgi.base.vo.Result;
+import com.corgi.core.common.toolkit.SecurityUtil;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +27,10 @@ public class SystemController {
                 put("totalVisitCount", 304);
             }
         });
+    }
+
+    @GetMapping("/currentUser")
+    public Result currentUser() {
+        return Result.ok(SecurityUtil.getLoginUser());
     }
 }
