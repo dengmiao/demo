@@ -77,13 +77,15 @@ public class UserController {
                 .defaultIfEmpty(new ResponseEntity(Result.error(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()), HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("getByAge/{start}/{end}")
-    public Flux<User> getByAgeBetween(@PathVariable("start") Integer start, @PathVariable("end") Integer end) {
+  @GetMapping("getByAge/{start:\\d+}/{end:\\d+}")
+  public Flux<User> getByAgeBetween(
+      @PathVariable("start") Integer start, @PathVariable("end") Integer end) {
         return this.userRepository.findByAgeBetween(start, end);
     }
 
-    @GetMapping("getByAgeNativeQuery/{start}/{end}")
-    public Flux<User> getByAgeNativeQuery(@PathVariable("start") Integer start, @PathVariable("end") Integer end) {
+  @GetMapping("getByAgeNativeQuery/{start:\\d+}/{end:\\d+}")
+  public Flux<User> getByAgeNativeQuery(
+      @PathVariable("start") Integer start, @PathVariable("end") Integer end) {
         return this.userRepository.findByNativeQuery(start, end);
     }
 }
