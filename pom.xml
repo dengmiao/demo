@@ -22,6 +22,7 @@
         <module>limit</module>
         <module>postgres</module>
         <module>mongodb</module>
+        <module>r2dbc</module>
     </modules>
 
     <properties>
