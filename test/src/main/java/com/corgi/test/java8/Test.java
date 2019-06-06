@@ -18,7 +18,7 @@ public class Test {
         //supplyAsync内部使用ForkJoinPool线程池执行任务
         CompletableFuture<String> completableFuture= CompletableFuture.supplyAsync(()->{
             //模拟执行耗时任务
-            log.info("task doing...");
+            log.info("当前线程: {} task doing...", Thread.currentThread().getName());
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -27,6 +27,6 @@ public class Test {
             //返回结果
             return "result";
         });
-        log.info("计算结果:"+completableFuture.get());
+        log.info("计算结果: {}", completableFuture.get());
     }
 }
