@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @program: demo
@@ -32,7 +33,7 @@ public class CustomSerializer implements ObjectSerializer {
     /**
      * 序列化标志位
      */
-    private static volatile boolean flag = true;
+    private static AtomicBoolean atomicFlag = new AtomicBoolean(true);
 
     /**
      * 切面  App Api切点
@@ -46,7 +47,8 @@ public class CustomSerializer implements ObjectSerializer {
         Object result = point.proceed();
         if(result instanceof Result) {}
         log.warn("[App REST API] @io.swagger.annotations.ApiOperation {}", Long.class);
-        flag = false;
+        //flag = false;
+        atomicFlag = new AtomicBoolean(false);
         return result;
     }
 
@@ -62,7 +64,8 @@ public class CustomSerializer implements ObjectSerializer {
         Object result = point.proceed();
         if(result instanceof Result) {}
         log.warn("[Web REST API] !@io.swagger.annotations.ApiOperation {}", String.class);
-        flag = true;
+        //flag = true;
+        atomicFlag = new AtomicBoolean(true);
         return result;
     }
 
@@ -73,7 +76,7 @@ public class CustomSerializer implements ObjectSerializer {
             serializer.write(o);
         } else {
             // 待序列化属性本身是Number
-            if(flag) {
+            if(atomicFlag.get()) {
                 serializer.write(o != null ? String.valueOf(o) : null);
             } else {
                 serializer.write(o);
