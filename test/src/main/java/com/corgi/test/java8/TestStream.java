@@ -90,8 +90,8 @@ public class TestStream {
         System.out.println(optional1.orElse(""));
         System.out.println("\n-------------");
         // 带初始化值的reduce
-        String optional2 = Stream.of(str.split(" ")).reduce("", (s1, s2) -> s1 + "#" + s2);
-        System.out.println(optional2);
+        String optional2 = Stream.of(str.split(" ")).reduce("init", (s1, s2) -> s1 + "#" + s2);
+        System.out.println(">>>>" + optional2);
         System.out.println("\n-------------");
         // max
         Optional<String> max = Stream.of(str.split(" ")).max((s1, s2) -> s1.length() - s2.length());

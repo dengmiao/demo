@@ -83,5 +83,7 @@ public class TreeService {
         long s2 = System.currentTimeMillis();
         System.out.println(JSONUtil.formatJsonStr(JSONUtil.toJsonStr(service.recursiveTree())));
         System.out.println("线性递归: " + (System.currentTimeMillis() - s2));
+
+        System.out.println(data.stream().collect(Collectors.toMap(tree -> tree.getId(), tree -> tree)));
     }
 }
