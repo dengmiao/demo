@@ -20,7 +20,7 @@ public class PageVo implements Serializable {
     private Integer pageNo = 1;
 
     @ApiModelProperty(value = "页面大小")
-    private Integer PageSize = 10;
+    private Integer pageSize = 10;
 
     @ApiModelProperty(value = "排序字段")
     private String column;

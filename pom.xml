@@ -23,6 +23,7 @@
         <module>postgres</module>
         <module>mongodb</module>
         <module>r2dbc</module>
+        <module>aggregator</module>
     </modules>
 
     <properties>

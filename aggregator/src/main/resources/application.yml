@@ -1,0 +1,5 @@
+io:
+  github:
+    lvyahui8:
+      spring:
+        base-packages: com.corgi.aggregator
