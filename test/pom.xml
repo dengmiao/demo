@@ -14,6 +14,7 @@
     <properties>
         <google.guava.version>27.0.1-jre</google.guava.version>
         <hutool.version>4.1.19</hutool.version>
+        <google.zxing.version>3.4.0</google.zxing.version>
     </properties>
 
     <dependencies>
@@ -28,6 +29,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${google.zxing.version}</version>
         </dependency>
     </dependencies>
 </project>
