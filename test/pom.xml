@@ -14,6 +14,7 @@
     <properties>
         <google.guava.version>27.0.1-jre</google.guava.version>
         <hutool.version>4.1.19</hutool.version>
+        <google.zxing.version>3.4.0</google.zxing.version>
     </properties>
 
     <dependencies>
@@ -34,6 +35,11 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
             <version>3.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${google.zxing.version}</version>
         </dependency>
     </dependencies>
 </project>
