@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @title: ObserverPattern
+ * @title: BehaviorObserverPattern
  * @description: 观察者模式
  * @author: dengmiao
  * @create: 2019-07-24 17:03
  **/
-public class ObserverPattern {
+public class BehaviorObserverPattern {
 
     /**
      * 抽象被观察者接口

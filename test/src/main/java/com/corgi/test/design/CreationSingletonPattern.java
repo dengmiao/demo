@@ -3,8 +3,8 @@ package com.corgi.test.design;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import static com.corgi.test.design.SingletonPattern.SingletonInner;
-import static com.corgi.test.design.SingletonPattern.SingletonEnum;
+import static com.corgi.test.design.CreationSingletonPattern.SingletonInner;
+import static com.corgi.test.design.CreationSingletonPattern.SingletonEnum;
 
 /**
  * @program: demo
@@ -12,7 +12,42 @@ import static com.corgi.test.design.SingletonPattern.SingletonEnum;
  * @author: dengmiao
  * @create: 2019-04-20 15:16
  **/
-public class SingletonPattern {
+public class CreationSingletonPattern {
+
+    /**
+     * 一般情况下，不建议使用懒汉方式，建议使用饿汉方式。
+     * 只有在要明确实现 lazy loading 效果时，才会使用登记方式。
+     * 如果涉及到反序列化创建对象时，可以尝试使用枚举方式。
+     * 如果有其他特殊的需求，可以考虑使用双检锁方式
+     */
+
+    /**
+     * 懒汉式
+     * 懒加载 线程相对安全
+     * 能够在多线程中很好的工作，但是，效率很低，99% 情况下不需要同步
+     */
+    static class SingletonLazy {
+        private static SingletonLazy instance;
+        private SingletonLazy (){}
+        public static synchronized SingletonLazy getInstance() {
+            if (instance == null) {
+                instance = new SingletonLazy();
+            }
+            return instance;
+        }
+    }
+
+    /**
+     * 饿汉式
+     * 基于 classloader 机制避免了多线程的同步问题，不过，instance 在类装载时就实例化
+     */
+    static class SingletonAdvance {
+        private static SingletonAdvance instance = new SingletonAdvance();
+        private SingletonAdvance (){}
+        public static SingletonAdvance getInstance() {
+            return instance;
+        }
+    }
 
     /**
      * 双锁机制+volatile
@@ -44,7 +79,7 @@ public class SingletonPattern {
     }
 
     /**
-     * 内部类版的单例
+     * 登记式/静态内部类 内部类版的单例
      * 懒加载
      * 无法防止反射打破现有结构
      */
