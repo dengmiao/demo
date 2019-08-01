@@ -17,6 +17,7 @@
         <poi-scratchpad.version>3.17</poi-scratchpad.version>
         <google.zxing.version>3.4.0</google.zxing.version>
         <cglib.version>3.2.12</cglib.version>
+        <emoji-converter.version>1.0.0</emoji-converter.version>
     </properties>
 
     <dependencies>
@@ -48,6 +49,12 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>${cglib.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>java-emoji-converter</artifactId>
+            <version>${emoji-converter.version}</version>
         </dependency>
     </dependencies>
 </project>
