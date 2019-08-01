@@ -1,8 +1,8 @@
 package com.corgi.test.concurrent;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
+import java.util.concurrent.*;
 
 /**
  * @program: demo
@@ -24,11 +24,48 @@ public class TestCallable {
         new Thread(stringFutureTask).start();
 
         System.out.printf("%.2f %s\n", doubleFutureTask.get(), stringFutureTask.get());
-        System.out.println("总耗时: " + (System.currentTimeMillis() - start));
+        System.out.println("并行总耗时: " + (System.currentTimeMillis() - start));
+
+        long s0 = System.currentTimeMillis();
+        countDownLatch();
+        System.out.println("CountDownLatch总耗时: " + (System.currentTimeMillis() - s0));
 
         long s = System.currentTimeMillis();
         System.out.printf("%.2f %s\n", getDouble(), getString());
-        System.out.printf("总耗时: %s\n", System.currentTimeMillis() - s);
+        System.out.printf("串行总耗时: %s\n", System.currentTimeMillis() - s);
+    }
+
+    public static void countDownLatch() {
+        final CountDownLatch cdl = new CountDownLatch(2);
+
+        FutureTask<Double> doubleFutureTask = new FutureTask<>(() -> {
+            try {
+                return getDouble();
+            } finally{
+                cdl.countDown();
+            }
+        });
+        FutureTask<String> stringFutureTask = new FutureTask<>(() -> {
+            try {
+                return getString();
+            } finally{
+                cdl.countDown();
+            }
+        });
+
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("async-task-runner-%d").build();
+        ExecutorService singleThreadPool = new ThreadPoolExecutor(2, 2, 0L, TimeUnit.MICROSECONDS,
+                new LinkedBlockingDeque<>(1024), threadFactory, new ThreadPoolExecutor.AbortPolicy());
+        try {
+            singleThreadPool.execute(doubleFutureTask);
+            singleThreadPool.execute(stringFutureTask);
+            cdl.await();
+            System.out.printf("%.2f %s\n", doubleFutureTask.get(), stringFutureTask.get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            singleThreadPool.shutdown();
+        }
     }
 
     public static double getDouble() throws InterruptedException {
