@@ -12,7 +12,7 @@
     <artifactId>test</artifactId>
 
     <properties>
-        <google.guava.version>27.0.1-jre</google.guava.version>
+        <google.guava.version>29.0-jre</google.guava.version>
         <hutool.version>4.1.19</hutool.version>
         <poi-scratchpad.version>3.17</poi-scratchpad.version>
         <google.zxing.version>3.4.0</google.zxing.version>
