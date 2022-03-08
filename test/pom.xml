@@ -14,7 +14,7 @@
     <properties>
         <google.guava.version>27.0.1-jre</google.guava.version>
         <hutool.version>4.1.19</hutool.version>
-        <poi-scratchpad.version>3.17</poi-scratchpad.version>
+        <poi-scratchpad.version>5.2.1</poi-scratchpad.version>
         <google.zxing.version>3.4.0</google.zxing.version>
         <cglib.version>3.2.12</cglib.version>
         <emoji-converter.version>1.0.0</emoji-converter.version>
